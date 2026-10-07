@@ -22,6 +22,8 @@
   --code-bg:#0E1A14; --code-fg:#DCEFE4; --code-line:#21362B; --code-cm:#88A795; --code-op:#FFFFFF; --code-lbl:#FDE68A; --code-num:#A5F3FC; --code-hl:#24452F;
   --k-zero:#CBD5E1; --k-v:#F9A8D4; --k-a:#9DBDFF; --k-t:#FDBA74; --k-s:#6EE7B7; --k-x:#C4B5FD;
   --wire:#AEBDB3; --wire-on:#E4572E;
+  --i0:#2563EB; --i1:#DB2777; --i2:#15803D; --i3:#C2410C; --i4:#7C3AED; --i5:#0E7490;
+  --code-str:#D9F99D; --code-dir:#F0ABFC;
   --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
   --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
@@ -36,6 +38,7 @@
   --st-bi:#3B82F6; --st-di:#8B5CF6; --st-ex:#EF4444; --st-mem:#D97706; --st-er:#10B981; --st-ink:#FFFFFF;
   --code-bg:#07100B; --code-line:#1A2B22; --code-hl:#1F3D2B;
   --wire:#3D5246; --wire-on:#FF7A50;
+  --i0:#60A5FA; --i1:#F472B6; --i2:#4ADE80; --i3:#FB923C; --i4:#A78BFA; --i5:#22D3EE;
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -47,6 +50,7 @@
   --st-bi:#3B82F6; --st-di:#8B5CF6; --st-ex:#EF4444; --st-mem:#D97706; --st-er:#10B981; --st-ink:#FFFFFF;
   --code-bg:#07100B; --code-line:#1A2B22; --code-hl:#1F3D2B;
   --wire:#3D5246; --wire-on:#FF7A50;
+  --i0:#60A5FA; --i1:#F472B6; --i2:#4ADE80; --i3:#FB923C; --i4:#A78BFA; --i5:#22D3EE;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -86,7 +90,7 @@ code,kbd,.mono{font-family:var(--f-mono);font-size:.88em}
 .hero p.lead{font-size:1.2rem;color:var(--muted);margin-top:.8rem}
 .instr-strip{margin-top:22px;background:var(--code-bg);color:var(--code-fg);border-radius:var(--radius);padding:14px 18px;font-family:var(--f-mono);font-size:clamp(.9rem,2.4vw,1.15rem);overflow-x:auto;white-space:nowrap}
 .instr-strip .gloss{display:block;color:var(--code-cm);font-size:.8em;margin-top:4px}
-.roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:22px}
+.roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px;margin-top:22px}
 .roadmap a{display:block;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
 .roadmap a:hover{border-color:var(--accent)}
 .roadmap .k{font-family:var(--f-mono);font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.06em}
@@ -360,6 +364,102 @@ details.ans>div{padding:0 14px 12px}
 .sqgrid i{width:16px;height:16px;border-radius:3px;display:block}
 
 footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:50px}
+:is(pre.asm,.icard .ex,.instr-strip,.codeview,.ed-hl) .tk-str{color:var(--code-str)}
+:is(pre.asm,.icard .ex,.instr-strip,.codeview,.ed-hl) .tk-dir{color:var(--code-dir);font-weight:600}
+.ed-hl .tk-op{color:var(--code-op);font-weight:700} .ed-hl .tk-lbl{color:var(--code-lbl);font-weight:600} .ed-hl .tk-ref{color:var(--code-lbl)}
+.ed-hl .tk-num{color:var(--code-num)} .ed-hl .tk-cm{color:var(--code-cm);font-style:italic}
+.ed-hl .tk-zero{color:var(--k-zero)} .ed-hl .tk-v{color:var(--k-v)} .ed-hl .tk-a{color:var(--k-a)} .ed-hl .tk-t{color:var(--k-t)} .ed-hl .tk-s{color:var(--k-s)} .ed-hl .tk-x{color:var(--k-x)}
+
+/* Animação em fases */
+.phases{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.phases button{font:inherit;font-size:.82rem;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 10px;cursor:pointer}
+.phases button.done{color:var(--ink);border-color:var(--wire-on)}
+.phases button.on{background:var(--wire-on);border-color:var(--wire-on);color:#fff}
+.phase-say{min-height:3.2em;margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.w.done{stroke:var(--wire-on);stroke-width:2.6;opacity:.45}
+.vtag rect{fill:var(--ink)} .vtag text{fill:var(--surface);font-family:var(--f-mono);font-size:11px;font-weight:700}
+.dg-on{stroke:var(--wire-on)!important;stroke-width:2.6!important}
+
+/* Pipeline animado */
+.pband{fill:var(--surface-2)}
+.pw{fill:none;stroke:var(--wire);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pw.busy{stroke:var(--ic);stroke-width:3.2}
+.pcmp{fill:var(--surface);stroke:var(--ink);stroke-width:1.5}
+.pcmp.busy{stroke:var(--ic);stroke-width:2.8}
+.preg{fill:var(--surface-2);stroke:var(--ink);stroke-width:1.4}
+.preg.busy{fill:var(--ic);fill-opacity:.35;stroke:var(--ic)}
+.fwc{fill:none;stroke:var(--wire-on);stroke-width:3.2;stroke-dasharray:7 4;animation:flow 1s linear infinite}
+.ptxt{font-family:var(--f-body);font-size:12px;fill:var(--ink)}
+.ptxt.m{font-family:var(--f-mono);font-size:10.5px;fill:var(--muted)}
+.ptxt.h{font-family:var(--f-display);font-weight:800;font-size:14px}
+.ptxt.ins{font-family:var(--f-mono);font-weight:700;font-size:11.5px}
+.idot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0}
+
+/* Memória */
+.bytes-wrap{overflow-x:auto;margin:12px 0}
+.bytes{display:grid;grid-template-columns:repeat(16,minmax(34px,1fr));gap:3px;font-family:var(--f-mono);font-size:.72rem;min-width:600px}
+.bytes .b{border:1.5px solid var(--ink);border-radius:4px;text-align:center;padding:5px 0;line-height:1.25}
+.bytes .b small{display:block;color:var(--muted);font-size:.9em}
+.bytes .g0{background:var(--r-a-bg)} .bytes .g1{background:var(--r-s-bg)} .bytes .g2{background:var(--r-t-bg)} .bytes .g3{background:var(--r-v-bg)}
+.bytes .lab{grid-column:span 4;text-align:center;border-top:3px solid var(--ink);margin-top:2px;padding-top:3px;font-weight:700;font-size:.8rem}
+.bytes .lab.c0{border-color:var(--r-a);color:var(--r-a)} .bytes .lab.c1{border-color:var(--r-s);color:var(--r-s)} .bytes .lab.c2{border-color:var(--r-t);color:var(--r-t)} .bytes .lab.c3{border-color:var(--r-v);color:var(--r-v)}
+.addr-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin-top:10px}
+.addr-out>*{min-width:0}
+.formula{font-family:var(--f-mono);font-size:1.02rem;padding:10px 12px;border-radius:10px;background:var(--accent-soft);color:var(--ink);overflow-x:auto}
+.formula b{color:var(--accent)}
+.memstrip .cur{background:var(--wire-on);color:#fff}
+.memstrip .cur .ad,.memstrip .cur .ix{color:#fff}
+.memstrip>div{transition:background .3s}
+.lsm{position:relative;display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:700px){.lsm{grid-template-columns:minmax(0,1fr)}}
+.lsm .rbox{border:2px solid var(--ink);border-radius:10px;padding:8px;background:var(--surface-2)}
+.lsm .rr{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-mono);padding:6px 10px;border-radius:6px;margin:4px 0;transition:box-shadow .3s}
+.lsm .rr .v{font-weight:700;font-size:1.05rem}
+.lsm .rr.flash,.memstrip>div.flash{box-shadow:0 0 0 3px var(--wire-on)}
+.fly{position:absolute;z-index:6;font-family:var(--f-mono);font-weight:700;background:var(--wire-on);color:#fff;padding:3px 10px;border-radius:7px;pointer-events:none;transition:transform .9s cubic-bezier(.45,.05,.2,1);box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.steps-say{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);font-size:.95rem;min-height:3em}
+.steps-say ol{margin:0;padding-left:20px}
+.endian{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+
+/* Laboratório */
+.lab-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin-top:12px}
+@media (max-width:920px){.lab-grid{grid-template-columns:minmax(0,1fr)}}
+.lab-grid>*{min-width:0}
+.ed{display:grid;grid-template-columns:46px minmax(0,1fr);background:var(--code-bg);border-radius:10px;height:470px;overflow:hidden;font-family:var(--f-mono);font-size:13px;line-height:20px}
+.ed-gutter{overflow:hidden;padding:8px 0 40px;color:var(--code-cm);text-align:right;user-select:none;border-right:1px solid var(--code-line)}
+.ed-gutter div{height:20px;padding-right:8px;cursor:pointer;position:relative}
+.ed-gutter div:hover{color:var(--code-fg)}
+.ed-gutter div.bp::before{content:"";position:absolute;left:5px;top:5px;width:10px;height:10px;border-radius:50%;background:#EF4444}
+.ed-gutter div.cur{color:#fff;background:var(--code-hl)}
+.ed-main{position:relative;overflow:hidden;min-width:0}
+.ed-hl,textarea.ed-ta{position:absolute;inset:0;margin:0;padding:8px 12px 40px;font-family:var(--f-mono);font-size:13px;line-height:20px;white-space:pre;tab-size:8;border:0;border-radius:0;width:100%;height:100%;box-sizing:border-box;letter-spacing:0}
+.ed-hl{overflow:hidden;color:var(--code-fg);pointer-events:none}
+.ed-hl .l{display:block;height:20px}
+.ed-hl .l.cur{background:var(--code-hl);box-shadow:inset 3px 0 0 var(--wire-on)}
+.ed-hl .l.err{background:#5A1D1D}
+.ed-hl .l.bpl{background:rgba(239,68,68,.14)}
+textarea.ed-ta{background:transparent;color:transparent;caret-color:#FFFFFF;resize:none;outline:none;overflow:auto}
+textarea.ed-ta::selection{background:rgba(255,255,255,.25);color:transparent}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.panel>h4{margin:0;padding:8px 12px;font-size:.95rem;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.panel>.body{padding:8px 10px;max-height:330px;overflow:auto}
+.mtab{width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:.78rem}
+.mtab td,.mtab th{padding:3px 6px;border-bottom:1px dashed var(--line);text-align:right;white-space:nowrap}
+.mtab th{color:var(--muted);font-weight:700;position:sticky;top:0;background:var(--surface);z-index:1}
+.mtab td.l,.mtab th.l{text-align:left}
+.mtab tr.chg td{background:color-mix(in srgb,var(--wire-on) 20%,transparent)}
+.mtab tr.cur td{background:var(--accent-soft)}
+.mtab tr.used td{background:var(--r-x-bg)}
+.mtab tr.sp td{border-top:3px solid var(--r-x)}
+.mtab tr.free td{color:var(--muted)}
+.mtab .note{color:var(--r-x);font-weight:700;text-align:left}
+.mtab .lbl{color:var(--accent);font-weight:700;text-align:left}
+.console{background:var(--code-bg);color:var(--code-fg);font-family:var(--f-mono);font-size:.84rem;padding:8px 10px;min-height:56px;max-height:170px;overflow:auto;white-space:pre-wrap;border-radius:8px;margin:0}
+.lab-status{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.9rem;margin-top:8px}
+.lab-status b{font-family:var(--f-mono)}
+.pill-warn{display:inline-block;font-size:.75rem;font-weight:700;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:1px 8px}
+.labbtn{margin:-4px 0 12px}
 </style>
 </head>
 <body>
@@ -371,7 +471,7 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
       <a href="#parte1">1 · MIPS</a>
       <a href="#parte2">2 · Arquitetura</a>
       <a href="#parte3">3 · Prova na mão</a>
-      <a href="#simulador">Simulador</a>
+      <a href="#lab">Laboratório</a>
       <a href="#cola">Cola</a>
     </nav>
   </div>
@@ -388,7 +488,8 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:.9rem;border-top:1px
     <a href="#parte1"><div class="k">PARTE 1</div><div class="t">MIPS do zero</div><div class="d">Registradores, instruções, memória, if, laços, procedimentos e código de máquina.</div></a>
     <a href="#parte2"><div class="k">PARTE 2</div><div class="t">Por dentro do processador</div><div class="d">Conceitos da Aula 1, caminho de dados, monociclo, multiciclo, pipeline e conflitos.</div></a>
     <a href="#parte3"><div class="k">PARTE 3</div><div class="t">Prova na mão</div><div class="d">Receita para montar qualquer laço, potência, raiz, simulador e exercícios dos slides.</div></a>
-    <a href="#cola"><div class="k">NO FINAL</div><div class="t">Cola de revisão</div><div class="d">Uma tela com tudo o que você precisa lembrar na véspera.</div></a>
+    <a href="#cola"><div class="k">REVISÃO</div><div class="t">Cola</div><div class="d">Uma tela com tudo o que você precisa lembrar na véspera.</div></a>
+    <a href="#lab"><div class="k">NO FINAL</div><div class="t">Laboratório MIPS</div><div class="d">Escreva e rode seu código linha a linha vendo registradores, memória e pilha.</div></a>
   </div>
   <div class="legend" aria-label="Legenda de cores dos registradores">
     <span><i style="background:var(--r-s)"></i><code>$s</code> variáveis (salvos)</span>
@@ -514,25 +615,106 @@ sub $s0, $t0, $t1   # f = t0 - t1</pre></div>
   </div>
   <p>Repare: como cada instrução só faz <b>uma</b> conta, a expressão vira 3 linhas, e os resultados do meio vão para <span class="rg t">$t</span> (rascunho).</p>
 
-  <h3 id="p1-mem"><span class="n">1.4</span>Memória, <code>lw</code>, <code>sw</code> e vetores (arrays)</h3>
-  <p>Variáveis simples ficam em registradores. Estruturas grandes, como vetores, ficam na <b>memória</b>. A memória é endereçada em <b>bytes</b>, e uma palavra ocupa <b>4 bytes</b>. Por isso:</p>
-  <ul>
-    <li>Endereços de palavras são <b>múltiplos de 4</b> (restrição de alinhamento).</li>
-    <li>O elemento <code>A[k]</code> fica em <b>base + 4×k</b>. Então <code>A[8]</code> está no deslocamento <b>32</b> e <code>A[12]</code> no <b>48</b>.</li>
-    <li>A ordem dos bytes dentro da palavra pode ser <b>big endian</b> ou <b>little endian</b>.</li>
-  </ul>
-  <div class="memstrip" aria-label="Vetor A na memória">
-    <div><span class="ix">A[0]</span><span class="vl">…</span><span class="ad">base+0</span></div>
-    <div><span class="ix">A[1]</span><span class="vl">…</span><span class="ad">base+4</span></div>
-    <div><span class="ix">A[2]</span><span class="vl">…</span><span class="ad">base+8</span></div>
-    <div><span class="ix">A[3]</span><span class="vl">…</span><span class="ad">base+12</span></div>
-    <div><span class="ix">…</span><span class="vl">…</span><span class="ad">…</span></div>
-    <div class="hl"><span class="ix">A[8]</span><span class="vl">…</span><span class="ad">base+32</span></div>
-    <div><span class="ix">…</span><span class="vl">…</span><span class="ad">…</span></div>
-    <div class="hl"><span class="ix">A[12]</span><span class="vl">…</span><span class="ad">base+48</span></div>
-  </div>
-  <p class="small">O endereço base do vetor fica num registrador (nos slides, <span class="rg s">$s3</span>). O número antes do parênteses é o deslocamento em bytes.</p>
+  <h3 id="p1-mem"><span class="n">1.4</span>Memória: endereço, base e deslocamento (de 4 em 4)</h3>
+  <p>Os registradores são só 32. Tudo o que é grande, como um vetor de 1000 números, mora na <b>memória</b>. Para usar um valor da memória você precisa saber <b>onde</b> ele está, e esse "onde" é o <b>endereço</b>.</p>
 
+  <h4>1º A memória é uma fileira de gavetas numeradas</h4>
+  <div class="callout analogy"><span class="tag">Analogia</span>
+    <p>Imagine um armário com milhões de gavetas pequenas, uma ao lado da outra. Cada gaveta guarda <b>1 byte</b> (8 bits) e tem um número: o <b>endereço</b>. Um número inteiro do MIPS (uma <b>palavra</b>) tem 32 bits, ou seja, <b>4 bytes</b>, então ele ocupa <b>4 gavetas seguidas</b>.</p>
+  </div>
+  <p>Veja 16 gavetas a partir do endereço 1000. Cada cor é uma palavra (um elemento do vetor A). Repare: a próxima palavra sempre começa <b>4 endereços depois</b>.</p>
+  <div class="bytes-wrap"><div class="bytes" aria-label="16 bytes agrupados em 4 palavras">
+    <div class="b g0">1000<small>byte</small></div><div class="b g0">1001<small>byte</small></div><div class="b g0">1002<small>byte</small></div><div class="b g0">1003<small>byte</small></div>
+    <div class="b g1">1004<small>byte</small></div><div class="b g1">1005<small>byte</small></div><div class="b g1">1006<small>byte</small></div><div class="b g1">1007<small>byte</small></div>
+    <div class="b g2">1008<small>byte</small></div><div class="b g2">1009<small>byte</small></div><div class="b g2">1010<small>byte</small></div><div class="b g2">1011<small>byte</small></div>
+    <div class="b g3">1012<small>byte</small></div><div class="b g3">1013<small>byte</small></div><div class="b g3">1014<small>byte</small></div><div class="b g3">1015<small>byte</small></div>
+    <div class="lab c0">A[0] · começa em 1000</div><div class="lab c1">A[1] · começa em 1004</div><div class="lab c2">A[2] · começa em 1008</div><div class="lab c3">A[3] · começa em 1012</div>
+  </div></div>
+
+  <h4>2º A regra de ouro: base + deslocamento</h4>
+  <p>O endereço do primeiro elemento (<code>A[0]</code>) é a <b>base</b>. Ele fica guardado num registrador (nos slides, <span class="rg s">$s3</span>). Para chegar no elemento <code>A[i]</code>, você anda <b>i palavras</b> a partir da base, e cada palavra tem 4 bytes:</p>
+  <div class="formula">endereço de A[i] = <b>base</b> + <b>i × 4</b> &nbsp;&nbsp;→&nbsp;&nbsp; o "i × 4" é o <b>deslocamento</b> (em bytes)</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Quero</th><th>Deslocamento (i × 4)</th><th>Instrução</th><th>De onde vem (slides)</th></tr></thead>
+    <tbody>
+      <tr><td><code>A[0]</code></td><td class="num">0 × 4 = 0</td><td><code>lw $t0, 0($s3)</code></td><td>—</td></tr>
+      <tr><td><code>A[1]</code></td><td class="num">1 × 4 = 4</td><td><code>lw $t0, 4($s3)</code></td><td>—</td></tr>
+      <tr><td><code>A[8]</code></td><td class="num">8 × 4 = 32</td><td><code>lw $t0, 32($s3)</code></td><td>slides 7 e 9</td></tr>
+      <tr><td><code>A[12]</code></td><td class="num">12 × 4 = 48</td><td><code>sw $t0, 48($s3)</code></td><td>slide 9</td></tr>
+      <tr><td><code>A[300]</code></td><td class="num">300 × 4 = 1200</td><td><code>lw $t0, 1200($t1)</code></td><td>slide 20</td></tr>
+      <tr><td><code>A[i]</code></td><td class="num">4 × i (calculado com somas)</td><td>ver o código abaixo</td><td>slide 10</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><span class="tag">Cuidado</span><p>O número antes do parênteses está em <b>bytes</b>, não é o índice. <code>A[3]</code> é <code>12($s3)</code>, nunca <code>3($s3)</code>. E endereço de palavra tem que ser <b>múltiplo de 4</b> (restrição de alinhamento): <code>lw $t0, 6($s3)</code> dá erro.</p></div>
+
+  <div class="widget" id="w-addr">
+    <div class="widget-head"><span class="ttl">Calculadora de endereço</span>
+      <span class="seg" id="addr-mode"><button data-i="w" class="on">vetor de int (palavra, ×4)</button><button data-i="b">string / char (byte, ×1)</button></span></div>
+    <div class="widget-body">
+      <div class="controls">
+        <label class="inl" for="addr-base">Base ($s3) =</label><input type="text" id="addr-base" value="1000" size="12">
+        <label class="inl" for="addr-i">Índice i ($s4) =</label><input type="range" id="addr-i" min="0" max="9" value="3" style="width:180px"><b id="addr-iv" class="mono">3</b>
+        <button class="btn" id="addr-prev" type="button">◂ i−1</button><button class="btn" id="addr-next" type="button">i+1 ▸</button>
+      </div>
+      <div class="memstrip" id="addr-strip"></div>
+      <div class="formula" id="addr-formula"></div>
+      <div class="addr-out">
+        <div><div class="lab small"><b>Índice fixo</b> (o montador já sabe o número)</div><pre class="asm" id="addr-const"></pre></div>
+        <div><div class="lab small"><b>Índice numa variável</b> (calcula 4 × i só com somas)</div><pre class="asm" id="addr-var"></pre></div>
+      </div>
+      <p class="small">Mude a base e o índice e veja o endereço mudar. Tente base <code>0x10010000</code>, que é onde o MARS e o laboratório guardam o <code>.data</code>.</p>
+    </div>
+  </div>
+
+  <h4>3º <code>lw</code> e <code>sw</code> em câmera lenta</h4>
+  <p><code>lw</code> (load word) <b>copia da memória para o registrador</b>. <code>sw</code> (store word) <b>copia do registrador para a memória</b>. Nos dois, o endereço é calculado do mesmo jeito: <b>registrador base + deslocamento</b>. Clique nas instruções e veja o valor viajar:</p>
+  <div class="widget" id="w-lsm">
+    <div class="widget-head"><span class="ttl">lw e sw animados</span><span class="controls"><button class="btn" id="lsm-reset" type="button">Reiniciar ⟲</button></span></div>
+    <div class="widget-body">
+      <div class="controls" id="lsm-btns"></div>
+      <div class="controls" style="margin-top:8px"><label class="inl" for="lsm-in">Ou digite:</label><input type="text" id="lsm-in" value="lw $t2, 20($s3)" size="20"><button class="btn primary" id="lsm-go" type="button">Executar</button></div>
+      <div class="lsm" id="lsm" style="margin-top:12px">
+        <div class="rbox"><b>Registradores</b><div id="lsm-regs"></div></div>
+        <div><b>Memória (vetor A)</b><div class="memstrip" id="lsm-mem" style="margin-top:6px"></div></div>
+      </div>
+      <div class="steps-say" id="lsm-say" aria-live="polite">Clique numa instrução acima.</div>
+    </div>
+  </div>
+
+  <h4>4º Percorrer o vetor: dois jeitos de andar de 4 em 4</h4>
+  <p>Num laço, o endereço muda a cada volta. Os slides usam os dois jeitos abaixo. Os dois andam <b>4 bytes por volta</b>, só muda o que você guarda no registrador.</p>
+  <div class="cols-code">
+    <div><div class="lab">Jeito A · guardo o índice i (slides 10 e 24)</div><pre class="asm">Loop: add  $t1, $s0, $s0   # 2i
+      add  $t1, $t1, $t1   # 4i   (deslocamento)
+      add  $t1, $t1, $s3   # base + 4i
+      lw   $t2, 0($t1)     # $t2 = A[i]
+      # ... usa $t2 ...
+      addi $s0, $s0, 1     # i = i + 1
+      j    Loop</pre>
+      <p class="small">i vale 0, 1, 2, 3… e o endereço vale base+0, base+4, base+8…</p></div>
+    <div><div class="lab">Jeito B · guardo o deslocamento (exercício 1, slide 52)</div><pre class="asm">      addi $t0, $zero, 0   # deslocamento = 0
+Loop: add  $t1, $s3, $t0   # base + deslocamento
+      lw   $t2, 0($t1)     # $t2 = A[i]
+      # ... usa $t2 ...
+      addi $t0, $t0, 4     # anda 4 bytes = próximo elemento
+      j    Loop</pre>
+      <p class="small">$t0 vale 0, 4, 8, 12… Por isso o slide multiplica o tamanho por 4 antes (<code>add $a1, $a1, $a1</code> duas vezes) para comparar em bytes.</p></div>
+  </div>
+
+  <h4>5º Byte, string e a ordem dos bytes</h4>
+  <div class="grid2">
+    <div class="card"><h4>Strings andam de 1 em 1</h4><p>Um caractere ocupa <b>1 byte</b>. Então em <code>char x[]</code> o elemento <code>x[i]</code> está em <b>base + i</b>, sem ×4, e usamos <code>lb</code>/<code>sb</code> (load/store byte). Foi assim no <code>strcpy</code> do slide 57.</p>
+      <div class="memstrip"><div><span class="ix">x[0]</span><span class="vl">'M'</span><span class="ad">base+0</span></div><div><span class="ix">x[1]</span><span class="vl">'I'</span><span class="ad">base+1</span></div><div><span class="ix">x[2]</span><span class="vl">'P'</span><span class="ad">base+2</span></div><div><span class="ix">x[3]</span><span class="vl">'S'</span><span class="ad">base+3</span></div><div><span class="ix">x[4]</span><span class="vl">0</span><span class="ad">base+4</span></div></div>
+      <p class="small">O 0 no final marca o fim da string.</p></div>
+    <div class="card"><h4>Big endian × little endian</h4><p>Uma palavra tem 4 bytes. Em que ordem eles ficam nas gavetas? Exemplo: o número <code>0x12345678</code> no endereço 1000:</p>
+      <div class="lab small"><b>Big endian</b> (o byte "grande" primeiro)</div>
+      <div class="memstrip"><div><span class="vl">12</span><span class="ad">1000</span></div><div><span class="vl">34</span><span class="ad">1001</span></div><div><span class="vl">56</span><span class="ad">1002</span></div><div><span class="vl">78</span><span class="ad">1003</span></div></div>
+      <div class="lab small"><b>Little endian</b> (o byte "pequeno" primeiro)</div>
+      <div class="memstrip"><div><span class="vl">78</span><span class="ad">1000</span></div><div><span class="vl">56</span><span class="ad">1001</span></div><div><span class="vl">34</span><span class="ad">1002</span></div><div><span class="vl">12</span><span class="ad">1003</span></div></div>
+      <p class="small">O <code>lw</code> devolve o mesmo número nos dois casos. A diferença só aparece quando você lê byte a byte.</p></div>
+  </div>
+
+  <h4>Os exemplos dos slides, passo a passo</h4>
   <div class="cols-code">
     <div><div class="lab">C · slide 7</div><pre class="c">g = h + A[8];
 /* g=$s1 h=$s2 base de A=$s3 */</pre></div>
@@ -545,10 +727,8 @@ add $s1, $s2, $t0   # g = h + A[8]</pre></div>
 add $t0, $s2, $t0   # t0 = h + A[8]
 sw  $t0, 48($s3)    # A[12] = t0   (12 × 4 = 48)</pre></div>
   </div>
-  <h4>Índice variável: <code>A[i]</code> só com somas</h4>
-  <p>Quando o índice está num registrador, você precisa calcular <b>4×i</b>. O slide faz isso <b>somando</b>, sem multiplicar: i+i = 2i, depois 2i+2i = 4i.</p>
   <div class="cols-code">
-    <div><div class="lab">C · slide 10</div><pre class="c">g = h + A[i];
+    <div><div class="lab">C · slide 10 (índice variável)</div><pre class="c">g = h + A[i];
 /* g=$s1 h=$s2 base=$s3 i=$s4 */</pre></div>
     <div><div class="lab">MIPS</div><pre class="asm">add $t1, $s4, $s4   # t1 = 2 × i
 add $t1, $t1, $t1   # t1 = 4 × i
@@ -556,7 +736,7 @@ add $t1, $t1, $s3   # t1 = endereço de A[i]
 lw  $t0, 0($t1)     # t0 = A[i]
 add $s1, $s2, $t0   # g = h + A[i]</pre></div>
   </div>
-  <div class="callout tip"><span class="tag">Macete</span><p>Registrador é rápido, memória é lenta. Quando o programa tem mais variáveis do que registradores, o compilador manda as menos usadas para a memória. Isso se chama <b>spilling (derramamento)</b>.</p></div>
+  <div class="callout tip"><span class="tag">Macete</span><p>Registrador é rápido, memória é lenta. Quando o programa tem mais variáveis do que registradores, o compilador manda as menos usadas para a memória. Isso se chama <b>spilling (derramamento)</b>. A <b>pilha</b> (seção 1.6) também é memória: ela fica nos endereços altos e anda de 4 em 4 para baixo. No <a href="#lab">laboratório</a> você vê a pilha mudando linha a linha.</p></div>
 
   <h3 id="p1-if"><span class="n">1.5</span>Decisões: if, if/else, laços e comparações</h3>
   <div class="callout analogy"><span class="tag">Analogia</span><p>Um <b>label</b> é uma placa no caminho (<code>loop:</code>, <code>fim:</code>). O <code>beq</code>/<code>bne</code> é um "se tal coisa, siga para a placa X". O <code>j</code> é "siga para a placa X, sem perguntar".</p></div>
@@ -1006,7 +1186,15 @@ Exit:</pre>
       <span class="seg" id="dp-seg"><button data-i="R" class="on">tipo R (add)</button><button data-i="lw">lw</button><button data-i="sw">sw</button><button data-i="beq">beq</button></span></div>
     <div class="widget-body">
       <div style="overflow-x:auto"><svg class="diagram" id="dp-svg" viewBox="0 0 880 430" role="img" aria-label="Caminho de dados monociclo do MIPS com o trajeto da instrução escolhida destacado" style="min-width:640px"></svg></div>
-      <p id="dp-say" style="margin-top:8px"></p>
+      <div class="controls" style="margin-top:8px">
+        <button class="btn primary" id="dp-play" type="button">▶ Animar passo a passo</button>
+        <button class="btn" id="dp-prev" type="button">◂ fase</button>
+        <button class="btn" id="dp-next" type="button">fase ▸</button>
+        <button class="btn" id="dp-all" type="button">Ver o caminho inteiro</button>
+      </div>
+      <div class="phases" id="dp-phases"></div>
+      <div class="phase-say" id="dp-say"></div>
+      <p class="small">No monociclo tudo isso acontece dentro de <b>um único ciclo de clock</b>. As fases mostram a ordem em que os sinais atravessam o circuito, com valores de exemplo.</p>
     </div>
   </div>
 
@@ -1084,11 +1272,25 @@ Exit:</pre>
     <li>As instruções levam de <b>3 a 5 ciclos</b>: <b>lw = 5 · sw = 4 · tipo R = 4 · beq = 3 · j = 3</b>.</li>
   </ul>
 
+  <h4>O caminho de dados multiciclo (slides 37–39)</h4>
+  <p>Compare com o monociclo: agora existe <b>uma memória só</b> e <b>uma ALU só</b>. Para isso funcionar, entre as peças aparecem registradores que seguram o resultado de um ciclo para o próximo, e muxes que escolhem quem usa cada peça em cada ciclo.</p>
+  <div class="grid2">
+    <div class="card"><h4>Registradores internos</h4><p><b>IR</b>: guarda a instrução buscada (a memória vai ser usada de novo para dados).<br><b>MDR</b>: guarda o dado lido da memória.<br><b>A</b> e <b>B</b>: guardam os dois registradores lidos.<br><b>ALUOut</b>: guarda o resultado da ALU (endereço, conta ou alvo do desvio).</p></div>
+    <div class="card"><h4>Muxes e sinais novos</h4><p><b>IorD</b>: o endereço da memória vem do PC (0, busca) ou da ALUOut (1, dado).<br><b>ALUSrcA</b>: 1ª entrada da ALU é o PC (0) ou A (1).<br><b>ALUSrcB</b>: 2ª entrada é B (00), 4 (01), imediato (10) ou imediato × 4 (11).<br><b>PCSource</b>: novo PC vem da ALU (00), da ALUOut (01) ou do jump (10).<br><b>IRWrite</b>, <b>PCWrite</b>, <b>PCWriteCond</b>: quando escrever no IR e no PC.</p></div>
+  </div>
+
   <div class="widget" id="w-multi">
-    <div class="widget-head"><span class="ttl">Os passos de cada instrução e a máquina de estados</span>
+    <div class="widget-head"><span class="ttl">Multiciclo animado: caminho de dados + máquina de estados</span>
       <span class="seg" id="mc-seg"><button data-i="lw" class="on">lw</button><button data-i="sw">sw</button><button data-i="R">tipo R</button><button data-i="beq">beq</button><button data-i="j">j</button></span></div>
     <div class="widget-body">
-      <div class="grid2">
+      <div class="controls">
+        <button class="btn primary" id="mc-play" type="button">▶ Animar os ciclos</button>
+        <button class="btn" id="mc-prev" type="button">◂ ciclo</button>
+        <button class="btn" id="mc-next" type="button">ciclo ▸</button>
+      </div>
+      <div style="overflow-x:auto;margin-top:8px"><svg class="diagram" id="mcdp-svg" viewBox="0 0 830 450" role="img" aria-label="Caminho de dados multiciclo com o ciclo atual destacado" style="min-width:640px"></svg></div>
+      <div class="phase-say" id="mc-say"></div>
+      <div class="grid2" style="margin-top:12px">
         <div><ol id="mc-steps" style="padding-left:20px;margin:0"></ol></div>
         <div style="overflow-x:auto"><svg class="diagram fsm" id="fsm-svg" viewBox="0 0 760 440" role="img" aria-label="Máquina de estados finitos do controle multiciclo" style="min-width:420px"></svg></div>
       </div>
@@ -1239,6 +1441,18 @@ lw $t3, 300($t0)</pre></div>
     </tbody>
   </table></div>
 
+  <h4>O caminho de dados do pipeline em movimento (slides 18–29)</h4>
+  <p>Este é o caminho de dados do monociclo cortado em 5 pedaços pelos registradores de pipeline. Cada instrução tem uma cor. A cada ciclo ela anda um estágio para a direita e a próxima entra atrás. O <b>controle</b> nasce no DI e viaja junto (campos EX, M e WB). Repare que a escrita no banco de registradores (ER) <b>volta</b> para o DI pelo fio de baixo.</p>
+  <div class="widget" id="w-ppdp">
+    <div class="widget-head"><span class="ttl">Pipeline animado (exemplo do slide 29)</span>
+      <span class="controls"><button class="btn primary" id="ppdp-play" type="button">▶ Animar</button><button class="btn" id="ppdp-prev" type="button">◂ ciclo</button><button class="btn" id="ppdp-next" type="button">ciclo ▸</button><button class="btn" id="ppdp-reset" type="button">Reiniciar</button></span></div>
+    <div class="widget-body">
+      <div style="overflow-x:auto"><svg class="diagram" id="ppdp-svg" viewBox="0 0 980 460" role="img" aria-label="Caminho de dados do pipeline com as instruções em cada estágio" style="min-width:700px"></svg></div>
+      <div class="phase-say" id="ppdp-say"></div>
+      <div class="pgrid-wrap" id="ppdp-grid"></div>
+    </div>
+  </div>
+
   <h4>Questões dos slides 24 e 29 (resolvidas)</h4>
   <div class="pgrid-wrap" id="ex24-grid"></div>
   <ul>
@@ -1277,12 +1491,14 @@ sub $t2, $s0, $t3   # quer ler $s0 no DI (ciclo 3)!</pre></div>
       </div>
       <div class="grid2" style="margin-top:10px">
         <div><textarea id="pp-code" rows="6" spellcheck="false" aria-label="Instruções para o pipeline"></textarea>
-          <div class="controls" style="margin-top:6px"><button class="btn primary" id="pp-run">Desenhar pipeline</button><button class="btn" id="pp-prev">◂ ciclo</button><button class="btn" id="pp-next">ciclo ▸</button></div></div>
+          <div class="controls" style="margin-top:6px"><button class="btn primary" id="pp-run">Desenhar pipeline</button><button class="btn" id="pp-prev">◂ ciclo</button><button class="btn" id="pp-next">ciclo ▸</button><button class="btn" id="pp-play">▶ Animar</button></div></div>
         <div><div class="stage-key"><span style="background:var(--st-bi)">BI</span><span style="background:var(--st-di)">DI</span><span style="background:var(--st-ex)">EX</span><span style="background:var(--st-mem)">MEM</span><span style="background:var(--st-er)">ER</span><span style="background:var(--muted)">parado (bolha)</span></div>
           <p id="pp-sum" style="margin:.3rem 0;font-weight:700"></p>
           <p id="pp-cycle" class="small" style="margin:0"></p></div>
       </div>
       <div class="pgrid-wrap" id="pp-grid"></div>
+      <div style="overflow-x:auto"><svg class="diagram" id="pp-svg" viewBox="0 0 980 460" role="img" aria-label="Caminho de dados do pipeline mostrando bolhas e adiantamento no ciclo atual" style="min-width:700px"></svg></div>
+      <p class="small" id="pp-dpsay"></p>
       <ul class="pnotes" id="pp-notes"></ul>
       <p class="small">Regra usada: o banco de registradores escreve na 1ª metade do ciclo e lê na 2ª, então uma instrução pode ler no DI o valor escrito no ER do mesmo ciclo. Célula com borda grossa = recebeu um valor adiantado.</p>
     </div>
@@ -1429,7 +1645,7 @@ fim:</pre>
 for (i = 0; i != b; i++)
     resultado = resultado + a;
 /* a=$s0  b=$s1  resultado=$v0 */</pre></div>
-    <div><div class="lab">MIPS</div><pre class="asm" id="code-mult"># MULTIPLICAÇÃO: $v0 = $s0 × $s1
+    <div><div class="lab">MIPS</div><pre class="asm" id="code-mult" data-lab="$s0=6, $s1=4"># MULTIPLICAÇÃO: $v0 = $s0 × $s1
         add  $v0, $zero, $zero   # resultado = 0
         add  $t0, $zero, $zero   # i = 0
 loop:   beq  $t0, $s1, fim       # se i == $s1, já somou tudo
@@ -1464,7 +1680,7 @@ for (i = 0; i != exp; i++) {
 }
 /* base=$s0 exp=$s1 res=$v0
    i=$t0 acc=$t1 j=$t2 */</pre></div>
-    <div><div class="lab">MIPS</div><pre class="asm" id="code-pot"># POTÊNCIA: $v0 = $s0 ^ $s1   (base ^ expoente)
+    <div><div class="lab">MIPS</div><pre class="asm" id="code-pot" data-lab="$s0=3, $s1=4"># POTÊNCIA: $v0 = $s0 ^ $s1   (base ^ expoente)
         addi $v0, $zero, 1       # resultado = 1
         add  $t0, $zero, $zero   # i = 0 (multiplicações feitas)
 externo:
@@ -1493,7 +1709,7 @@ fim:</pre></div>
 
   <h4>A mesma potência como procedimento (com <code>jal</code> e <code>jr</code>)</h4>
   <p>Se a questão pedir "faça um procedimento", use <span class="rg a">$a0</span> e <span class="rg a">$a1</span> para receber, <span class="rg v">$v0</span> para devolver e termine com <code>jr $ra</code>. Como o procedimento só usa <span class="rg t">$t</span> e não chama ninguém, <b>não precisa de pilha</b>.</p>
-  <pre class="asm" id="code-potproc"># PROGRAMA PRINCIPAL: calcula 3^4 chamando "pot"
+  <pre class="asm" id="code-potproc" data-lab=""># PROGRAMA PRINCIPAL: calcula 3^4 chamando "pot"
 main:   addi $a0, $zero, 3       # argumento 1: base
         addi $a1, $zero, 4       # argumento 2: expoente
         jal  pot                 # chama ($ra = endereço da próxima linha)
@@ -1530,7 +1746,7 @@ while (!(sobra &lt; impar)) {
     raiz  = raiz + 1;
 }
 /* n=$s0 raiz=$v0 impar=$t0 sobra=$t2 */</pre></div>
-    <div><div class="lab">MIPS</div><pre class="asm" id="code-raiz1"># RAIZ QUADRADA (ímpares): $v0 = raiz inteira de $s0
+    <div><div class="lab">MIPS</div><pre class="asm" id="code-raiz1" data-lab="$s0=30"># RAIZ QUADRADA (ímpares): $v0 = raiz inteira de $s0
         add  $v0, $zero, $zero   # raiz = 0
         add  $t2, $s0, $zero     # sobra = n (cópia, não estraga $s0)
         addi $t0, $zero, 1       # ímpar = 1
@@ -1556,7 +1772,7 @@ fim:                             # em $t2 sobra o resto (n - raiz²)</pre></div>
 
   <h4>Jeito 2: tentativa (testa 1², 2², 3²… até passar)</h4>
   <p>Mais longo, mas usa a multiplicação por somas que você já sabe. Bom se a prova pedir "use a multiplicação" ou se você quiser adaptar para <b>raiz cúbica</b> (é só multiplicar mais uma vez).</p>
-  <pre class="asm" id="code-raiz2"># RAIZ QUADRADA (tentativa): maior i com i×i &lt;= $s0
+  <pre class="asm" id="code-raiz2" data-lab="$s0=50"># RAIZ QUADRADA (tentativa): maior i com i×i &lt;= $s0
         addi $t0, $zero, 1       # i = 1 (candidato)
 tenta:  add  $t1, $zero, $zero   # quadrado = 0
         add  $t2, $zero, $zero   # j = 0
@@ -1571,39 +1787,10 @@ testa:  slt  $t3, $s0, $t1       # $t3 = 1 se n &lt; i×i (passou!)
 achou:  addi $v0, $t0, -1        # a raiz é o i anterior</pre>
   <p class="small">Para 50: 1, 4, 9, 16, 25, 36, 49 cabem; 64 passa. Resposta: 8 − 1 = <b>7</b>.</p>
 
-  <h3 id="simulador"><span class="n">3.5</span>Simulador de MIPS: veja seu código rodando</h3>
-  <p>Escolha um exemplo ou cole o seu código. Use <b>Passo</b> para andar uma linha por vez e ler a explicação em português, ou <b>Animar</b> para ver tudo andando. Registradores que mudam piscam.</p>
-  <div class="widget" id="w-sim">
-    <div class="widget-head"><span class="ttl">Simulador MIPS</span>
-      <span class="controls"><label class="inl" for="sim-preset">Exemplo:</label><select id="sim-preset"></select></span></div>
-    <div class="widget-body">
-      <div class="controls">
-        <label class="inl" for="sim-in">Entradas:</label><input type="text" id="sim-in" size="26" aria-describedby="sim-in-help">
-        <label class="inl" for="sim-mem">Memória:</label><input type="text" id="sim-mem" size="30" placeholder="0x10010000: 5 8 2">
-      </div>
-      <p class="small" id="sim-in-help" style="margin:.3rem 0 .6rem">Entradas no formato <code>$s0=3, $s1=4</code>. Memória: endereço inicial e as palavras, separadas por espaço.</p>
-      <div class="controls" style="margin-bottom:10px">
-        <button class="btn primary" id="sim-step">Passo ▸</button>
-        <button class="btn" id="sim-play">Animar ▶</button>
-        <button class="btn" id="sim-run">Executar tudo ▸▸</button>
-        <button class="btn" id="sim-reset">Reiniciar ⟲</button>
-        <button class="btn" id="sim-edit">Editar código ✎</button>
-      </div>
-      <div class="sim">
-        <div>
-          <textarea id="sim-code" rows="18" spellcheck="false" aria-label="Código MIPS" hidden></textarea>
-          <pre class="codeview" id="sim-view" aria-label="Código em execução"></pre>
-        </div>
-        <div>
-          <div class="simregs" id="sim-regs"></div>
-          <div class="simstatus" id="sim-status"></div>
-        </div>
-      </div>
-      <div id="sim-msg" aria-live="polite"></div>
-      <div class="simlog" id="sim-log" aria-live="polite"></div>
-      <p class="small">Aceita: add, addu, sub, subu, and, or, slt, addi, addiu, andi, ori, slti, lui, lw, sw, lb, sb, beq, bne, j, jal, jr, move, li, nop. O código começa em 0x00400000, <span class="rg x">$sp</span> = 0x7FFFFFFC e <span class="rg x">$gp</span> = 0x10008000, como no mapa de memória do slide. <code>jr $ra</code> com <span class="rg x">$ra</span> = 0 encerra o programa.</p>
-    </div>
-  </div>
+  <h3 id="simulador"><span class="n">3.5</span>Rode tudo no laboratório</h3>
+  <p>Todos os códigos desta parte rodam linha por linha no <a href="#lab"><b>Laboratório MIPS</b></a>, no fim da página. Lá você vê os registradores, a memória e a pilha mudando a cada instrução, e pode voltar um passo quando quiser. Escolha um exemplo:</p>
+  <div class="controls" id="lab-shortcuts"></div>
+  <p class="small">Debaixo de cada código desta parte também tem um botão "Rodar no laboratório".</p>
 
   <h3 id="p3-slides"><span class="n">3.6</span>Exercícios dos slides, resolvidos</h3>
 
@@ -1772,7 +1959,7 @@ L1:     addi $a0, $a0, -1      # n - 1
     <p>50−1=49 · 49−3=46 · 46−5=41 · 41−7=34 · 34−9=25 · 25−11=14 · 14−13=1 · 1 &lt; 15, para. Foram <b>7</b> subtrações: <b>raiz = 7</b>, sobra <b>1</b> (50 − 49).</p>
   </div></details>
   <details class="ans"><summary>3. Escreva o fatorial de $s0 em $v0, sem procedimento, só com somas.</summary><div>
-    <pre class="asm">        addi $v0, $zero, 1       # fat = 1
+    <pre class="asm" data-lab="$s0=5">        addi $v0, $zero, 1       # fat = 1
         addi $t0, $zero, 1       # i = 1
 For:    slt  $t3, $s0, $t0       # n &lt; i ?
         bne  $t3, $zero, Fim     # se i passou de n, acabou
@@ -1789,7 +1976,7 @@ Fim:</pre>
     <p class="small">5! = 1·1 → 1·2 → 2·3 → 6·4 → 24·5 = 120. Para n = 0 o laço não roda e dá 1.</p>
   </div></details>
   <details class="ans"><summary>4. Raiz cúbica inteira de $s0 (maior i com i³ ≤ n).</summary><div>
-    <pre class="asm">        addi $t0, $zero, 1       # i = 1
+    <pre class="asm" data-lab="$s0=30">        addi $t0, $zero, 1       # i = 1
 Tenta:  add  $t1, $zero, $zero   # quadrado = i × i
         add  $t2, $zero, $zero
 Q:      beq  $t2, $t0, Cubo
@@ -1810,7 +1997,7 @@ Achou:  addi $v0, $t0, -1</pre>
     <p class="small">Para 30: 1, 8, 27 cabem; 64 passa → <b>3</b>.</p>
   </div></details>
   <details class="ans"><summary>5. Divisão inteira $s0 ÷ $s1: quociente em $v0 e resto em $v1, só com subtração.</summary><div>
-    <pre class="asm">        add  $v0, $zero, $zero   # quociente = 0
+    <pre class="asm" data-lab="$s0=17, $s1=5">        add  $v0, $zero, $zero   # quociente = 0
         add  $v1, $s0, $zero     # resto = a
 Div:    slt  $t0, $v1, $s1       # resto &lt; b ?
         bne  $t0, $zero, Fim     # sim: acabou
@@ -1908,6 +2095,70 @@ Fim:</pre>
   </div>
 </section>
 
+<!-- ============================ LABORATÓRIO ============================ -->
+<section class="part" id="lab">
+  <div class="part-head">
+    <span class="k">NO FINAL · PRATIQUE</span>
+    <h2>Laboratório MIPS</h2>
+    <p>Escreva (ou cole) seu código, monte e execute linha por linha vendo registradores, memória e pilha.</p>
+  </div>
+  <p>Tecnicamente isto é um <b>montador</b> (assembler), como no slide 2 da Aula 5: ele traduz o assembly para instruções de máquina, e um simulador executa uma por uma. Funciona parecido com o MARS: aceita <code>.data</code>, <code>.text</code>, <code>.word</code>, <code>.asciiz</code>, labels e <code>syscall</code>.</p>
+  <div class="grid3">
+    <div class="card"><h4>1. Escreva</h4><p>Edite à vontade. Clique no número de uma linha para pôr um <b>breakpoint</b> (bolinha vermelha).</p></div>
+    <div class="card"><h4>2. Execute</h4><p><b>Passo</b> roda uma linha; <b>Voltar</b> desfaz a última; <b>Animar</b> roda sozinho; <b>Executar</b> vai até o fim ou até um breakpoint. Atalho: Ctrl+Enter = Passo.</p></div>
+    <div class="card"><h4>3. Observe</h4><p>Registrador que muda pisca. A <b>pilha</b> mostra quem foi salvo em cada endereço. A <b>memória</b> mostra seus dados do <code>.data</code>.</p></div>
+  </div>
+
+  <div class="widget" id="w-lab">
+    <div class="widget-head"><span class="ttl">Laboratório MIPS</span>
+      <span class="controls"><label class="inl" for="lab-preset">Exemplo:</label><select id="lab-preset"></select></span></div>
+    <div class="widget-body">
+      <div class="lab-top">
+        <button class="btn" id="lab-asm" type="button">⟲ Montar / reiniciar</button>
+        <button class="btn" id="lab-back" type="button">◂ Voltar</button>
+        <button class="btn primary" id="lab-step" type="button">Passo ▸</button>
+        <button class="btn" id="lab-play" type="button">▶ Animar</button>
+        <button class="btn" id="lab-run" type="button">▸▸ Executar</button>
+        <label class="inl" for="lab-speed">Velocidade</label><input type="range" id="lab-speed" min="1" max="10" value="5" style="width:110px">
+      </div>
+      <div class="lab-top" style="margin-top:8px">
+        <label class="inl" for="lab-init">Valores iniciais:</label><input type="text" id="lab-init" size="24" placeholder="$s0=3, $s1=4">
+        <label class="inl" for="lab-kbd">Teclado (syscall 5):</label><input type="text" id="lab-kbd" size="12" placeholder="2 10">
+      </div>
+      <div class="lab-status" id="lab-status"></div>
+      <div id="lab-msg" aria-live="polite"></div>
+      <div class="lab-grid">
+        <div>
+          <div class="ed">
+            <div class="ed-gutter" id="lab-gutter" title="Clique para pôr ou tirar um breakpoint"></div>
+            <div class="ed-main">
+              <pre class="ed-hl" id="lab-hl" aria-hidden="true"></pre>
+              <textarea class="ed-ta" id="lab-code" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Código MIPS do laboratório"></textarea>
+            </div>
+          </div>
+          <div class="lab-status" style="margin-bottom:6px"><b style="font-family:var(--f-display)">O que cada linha fez</b><span class="small">(a mais recente fica embaixo)</span></div>
+          <div class="simlog" id="lab-log" style="max-height:200px"></div>
+          <div class="panel" style="margin-top:12px"><h4>Console <span class="small">saída das syscalls 1, 4 e 11</span></h4><div class="body"><pre class="console" id="lab-out"></pre></div></div>
+        </div>
+        <div>
+          <div class="panel"><h4>Registradores <span class="seg" id="lab-fmt"><button data-i="d" class="on" type="button">dec</button><button data-i="h" type="button">hex</button></span></h4>
+            <div class="body"><div class="simregs" id="lab-regs"></div><div class="lab-status" id="lab-pc"></div></div></div>
+          <div class="panel"><h4>Pilha <span class="small" id="lab-spinfo"></span></h4><div class="body" id="lab-stack"></div></div>
+          <div class="panel"><h4>Memória de dados <span class="small">.data e outros endereços usados</span></h4><div class="body" id="lab-data"></div></div>
+        </div>
+      </div>
+      <details class="ans"><summary>Código de máquina (segmento de texto)</summary><div><div class="tbl-wrap" style="max-height:360px;overflow:auto" id="lab-mc"></div><p class="small">Pseudo-instruções aparecem como uma linha só aqui; o montador de verdade troca cada uma por 1 ou 2 instruções reais.</p></div></details>
+      <details class="ans"><summary>O que o laboratório aceita</summary><div>
+        <p><b>Instruções:</b> add, addu, sub, subu, and, or, nor, xor, slt, sltu, sll, srl, sra, addi, addiu, andi, ori, xori, slti, sltiu, lui, lw, sw, lb, lbu, sb, beq, bne, j, jal, jr, mult, div, mfhi, mflo, mul, syscall, nop.</p>
+        <p><b>Pseudo-instruções:</b> li, la, move, b, beqz, bnez, blt, bgt, ble, bge. Elas aparecem com um aviso, porque na prova o professor pode exigir <code>slt</code> + <code>bne</code>. O mesmo vale para mult, mul e div: funcionam aqui, mas a prova "só soma e subtração" não deixa.</p>
+        <p><b>Diretivas:</b> .data, .text, .word (aceita <code>0:10</code> para 10 zeros), .byte, .space, .ascii, .asciiz, .align, .globl.</p>
+        <p><b>Syscalls</b> (coloque o código em <code>$v0</code>): 1 imprime o inteiro de <code>$a0</code> · 4 imprime a string no endereço <code>$a0</code> · 5 lê um inteiro do campo "Teclado" para <code>$v0</code> · 11 imprime o caractere de <code>$a0</code> · 10 encerra.</p>
+        <p><b>Memória:</b> o código começa em 0x00400000 (a partir do label <code>main</code>, se existir), o <code>.data</code> em 0x10010000, <span class="rg x">$sp</span> = 0x7FFFFFFC e <span class="rg x">$gp</span> = 0x10008000. Overflow em add/addi/sub e endereço não alinhado param o programa com uma explicação, como uma exceção.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
 <footer>
   <p>Resumo feito a partir dos slides de Arquitetura de Computadores do Prof. Sérgio Murilo Maciel Fernandes: Aula 1 (introdução), Aula 5 (MIPS), Aula 6 (monociclo e multiciclo) e Aula 7 (pipeline). Os exemplos de potência, raiz e divisão da Parte 3 usam só as instruções dos slides.</p>
 </footer>
@@ -1920,6 +2171,7 @@ const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const SVGNS = 'http://www.w3.org/2000/svg';
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- Registradores ---------- */
 const REGN = ['zero','at','v0','v1','a0','a1','a2','a3','t0','t1','t2','t3','t4','t5','t6','t7',
@@ -1942,37 +2194,50 @@ function famOf(i){
 }
 function famTok(tok){ const i = regIndex(tok); return i<0 ? 'x' : famOf(i); }
 
-/* ---------- Destaque de código MIPS ---------- */
-const MNEM = new Set('add addu sub subu and or nor slt sltu addi addiu andi ori slti lui lw sw lb sb beq bne j jal jr move li nop mult mul div syscall la'.split(' '));
-function commentIndex(s){
-  const a = s.indexOf('#'), b = s.indexOf('//');
-  if(a<0) return b; if(b<0) return a; return Math.min(a,b);
+/* ---------- Comentários e destaque de código ---------- */
+function splitComment(line){
+  let q = '';
+  for(let i=0;i<line.length;i++){
+    const c = line[i];
+    if(q){ if(c==='\\'){ i++; continue; } if(c===q) q=''; continue; }
+    if(c==='"'){ q = c; continue; }
+    if(c==="'" && line[i+2]==="'"){ i += 2; continue; }
+    if(c==="'" && line[i+1]==='\\' && line[i+3]==="'"){ i += 3; continue; }
+    if(c==='#') return [line.slice(0,i), line.slice(i)];
+    if(c==='/' && line[i+1]==='/') return [line.slice(0,i), line.slice(i)];
+  }
+  return [line, ''];
 }
+function commentIndex(s){ const p = splitComment(s); return p[1] ? p[0].length : -1; }
+const MNEM = new Set('add addu sub subu and or nor xor slt sltu sll srl sra addi addiu andi ori xori slti sltiu lui lw sw lb lbu sb beq bne j jal jr move li la nop mult mul div mfhi mflo syscall b beqz bnez blt bgt ble bge'.split(' '));
 function hlLine(line){
-  const ci = commentIndex(line);
-  const code = ci<0 ? line : line.slice(0,ci);
-  const cm = ci<0 ? '' : line.slice(ci);
+  const [code, cm] = splitComment(line);
   let out = '', seenOp = false, m;
-  const re = /(\s+)|([A-Za-z_][\w.\-]*:)|(\$[A-Za-z0-9]+)|(0x[0-9A-Fa-f]+|-?\d+)|([A-Za-z_][\w.\-]*)|(.)/g;
+  const re = /(\s+)|("(?:[^"\\]|\\.)*"?)|('(?:[^'\\]|\\.)')|(\.[A-Za-z]\w*)|([A-Za-z_][\w.\-]*:)|(\$[A-Za-z0-9]+)|(0x[0-9A-Fa-f]+|-?\d+)|([A-Za-z_][\w.\-]*)|(.)/g;
   while((m = re.exec(code))){
     if(m[1]) out += m[1];
-    else if(m[2]) out += '<span class="tk-lbl">'+esc(m[2])+'</span>';
-    else if(m[3]) out += '<span class="tk-'+famTok(m[3])+'">'+esc(m[3])+'</span>';
-    else if(m[4]) out += '<span class="tk-num">'+esc(m[4])+'</span>';
-    else if(m[5]){ if(!seenOp){ seenOp = true; out += '<span class="tk-op">'+esc(m[5])+'</span>'; } else out += '<span class="tk-ref">'+esc(m[5])+'</span>'; }
-    else out += esc(m[6]);
+    else if(m[2]||m[3]) out += '<span class="tk-str">'+esc(m[2]||m[3])+'</span>';
+    else if(m[4]){ seenOp = true; out += '<span class="tk-dir">'+esc(m[4])+'</span>'; }
+    else if(m[5]) out += '<span class="tk-lbl">'+esc(m[5])+'</span>';
+    else if(m[6]) out += '<span class="tk-'+famTok(m[6])+'">'+esc(m[6])+'</span>';
+    else if(m[7]) out += '<span class="tk-num">'+esc(m[7])+'</span>';
+    else if(m[8]){ if(!seenOp){ seenOp = true; out += '<span class="tk-op">'+esc(m[8])+'</span>'; } else out += '<span class="tk-ref">'+esc(m[8])+'</span>'; }
+    else out += esc(m[9]);
   }
   if(cm) out += '<span class="tk-cm">'+esc(cm)+'</span>';
   return out;
 }
 function hlBlock(text){ return text.split('\n').map(hlLine).join('\n'); }
 $$('pre.asm, .icard .ex').forEach(el => { el.innerHTML = hlBlock(el.textContent); });
-$$('code').forEach(el => {
-  if(el.closest('pre')) return;
-  const t = el.textContent.trim();
-  const first = (t.split(/[\s,]/)[0]||'').toLowerCase();
-  if(t.includes('$') || MNEM.has(first)) el.innerHTML = hlLine(el.textContent);
-});
+function hlInline(root){
+  $$('code', root).forEach(el => {
+    if(el.closest('pre')) return;
+    const t = el.textContent.trim();
+    const first = (t.split(/[\s,]/)[0]||'').toLowerCase();
+    if(t.includes('$') || MNEM.has(first)) el.innerHTML = hlLine(el.textContent);
+  });
+}
+hlInline(document);
 
 /* ---------- Mapa de registradores ---------- */
 const REGDESC = {
@@ -2085,7 +2350,15 @@ function regInfoKey(i){
   draw();
 })();
 
-/* ---------- Caminho de dados monociclo ---------- */
+/* ---------- utilidades de SVG ---------- */
+function tagSVG(x, y, text){
+  const w = text.length*6.7 + 14;
+  return '<g class="vtag"><rect x="'+(x-w/2)+'" y="'+(y-9)+'" width="'+w+'" height="18" rx="5"/><text x="'+x+'" y="'+(y+4)+'" text-anchor="middle">'+esc(text)+'</text></g>';
+}
+const T = (x,y,t,c,anchor) => '<text class="dg-txt '+(c||'')+'" x="'+x+'" y="'+y+'"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+t+'</text>';
+const adderPts = (x,y) => [[x,y],[x+56,y+18],[x+56,y+38],[x,y+56],[x,y+34],[x+10,y+28],[x,y+22]].map(p=>p.join(',')).join(' ');
+
+/* ---------- Caminho de dados monociclo (com animação por fases) ---------- */
 (function(){
   const svg = $('#dp-svg'); if(!svg) return;
   const W = {
@@ -2122,11 +2395,42 @@ function regInfoKey(i){
     sw: '<code>sw $t2, 64($t3)</code>: a ALU calcula <code>$t3</code> + 64 e o valor de <code>$t2</code> (lido pelo campo rt) vai para a entrada de dados da memória, que escreve (MemWrite = 1). Nada é escrito nos registradores (RegWrite = 0).',
     beq: '<code>beq $t1, $t2, 25</code>: a ALU <b>subtrai</b> <code>$t1</code> − <code>$t2</code>. Ao mesmo tempo, o outro somador calcula (PC + 4) + 25 × 4 (o "desloca 2" multiplica por 4). Se a subtração der zero (Zero = 1) e Branch = 1, o mux escolhe o endereço do desvio para o PC.'
   };
+  const FETCH = ['pc_im','pc_add','four','pc4_a','instr','bus','ctrl_in'];
+  const PCT = [58,290], IMT = [175,306], ALT = [556,164], MMT = [705,362], WBT = [560,420], BAT = [596,38];
+  const PH = {
+    R: [
+      {n:'Busca', w:FETCH, t:[[PCT,'PC = 0x00400000'],[IMT,'add $t0,$t1,$t2']], s:'<b>Busca.</b> O PC (0x00400000) entrega o endereço à memória de instruções, que devolve <code>add $t0, $t1, $t2</code>. Ao mesmo tempo o somador de cima já calcula PC + 4.'},
+      {n:'Lê registradores', w:['rs','rt_read','rd1','rd2_a','rd2_mux'], t:[], s:'<b>Decodifica e lê.</b> O Controle olha o opcode (0 = tipo R) e liga os sinais. O banco de registradores lê <code>$t1</code> = 5 (campo rs) e <code>$t2</code> = 7 (campo rt).'},
+      {n:'Executa (ALU)', w:['alusrc_out','funct','alu_ctrl'], t:[[ALT,'5 + 7 = 12']], s:'<b>Executa.</b> ALUSrc = 0, então a 2ª entrada da ALU é o registrador. O campo funct (100000) diz "soma": 5 + 7 = 12.'},
+      {n:'Memória', w:['alu_out','alu_byp'], t:[[MMT,'12 passa por fora']], s:'<b>Memória.</b> O tipo R não usa a memória de dados. O 12 passa por fora dela e vai para o mux MemtoReg (= 0).'},
+      {n:'Escreve', w:['wb','rd_dst','regdst_out','pc4_mux','pcsrc_out'], t:[[WBT,'$t0 ← 12'],[PCT,'PC ← PC + 4']], s:'<b>Escreve.</b> RegDst = 1 escolhe o campo rd (<code>$t0</code>) e RegWrite = 1 grava 12 nele. O PC recebe PC + 4: próxima instrução.'}
+    ],
+    lw: [
+      {n:'Busca', w:FETCH, t:[[PCT,'PC = 0x00400000'],[IMT,'lw $t0, 32($t1)']], s:'<b>Busca.</b> A memória de instruções devolve <code>lw $t0, 32($t1)</code> e o somador calcula PC + 4.'},
+      {n:'Lê registradores', w:['rs','rd1','imm','ext_out'], t:[], s:'<b>Decodifica e lê.</b> O banco lê <code>$t1</code> = 1000 (a base, campo rs). O 32 (16 bits) passa pela extensão de sinal e vira um número de 32 bits.'},
+      {n:'Executa (ALU)', w:['imm_ext','alusrc_out','alu_ctrl'], t:[[ALT,'1000 + 32 = 1032']], s:'<b>Executa.</b> ALUSrc = 1: a ALU soma base + deslocamento = 1000 + 32 = <b>1032</b>. Isso é um <b>endereço</b>, não um resultado final.'},
+      {n:'Memória', w:['alu_out','alu_mem','mem_rd'], t:[[MMT,'Mem[1032] = 77']], s:'<b>Memória.</b> MemRead = 1: a memória de dados lê o endereço 1032 e devolve 77.'},
+      {n:'Escreve', w:['wb','rt_dst','regdst_out','pc4_mux','pcsrc_out'], t:[[WBT,'$t0 ← 77'],[PCT,'PC ← PC + 4']], s:'<b>Escreve.</b> MemtoReg = 1 (o valor vem da memória) e RegDst = 0 (o destino é o campo rt = <code>$t0</code>): <code>$t0</code> = 77.'}
+    ],
+    sw: [
+      {n:'Busca', w:FETCH, t:[[PCT,'PC = 0x00400000'],[IMT,'sw $t2, 64($t3)']], s:'<b>Busca.</b> A memória de instruções devolve <code>sw $t2, 64($t3)</code>.'},
+      {n:'Lê registradores', w:['rs','rt_read','rd1','rd2_a','imm','ext_out'], t:[], s:'<b>Decodifica e lê.</b> Lê <code>$t3</code> = 2000 (a base, campo rs) e <code>$t2</code> = 9 (o dado a guardar, campo rt). O 64 vira 32 bits.'},
+      {n:'Executa (ALU)', w:['imm_ext','alusrc_out','alu_ctrl'], t:[[ALT,'2000 + 64 = 2064']], s:'<b>Executa.</b> A ALU calcula o endereço: 2000 + 64 = 2064.'},
+      {n:'Memória', w:['alu_out','alu_mem','rd2_mem'], t:[[MMT,'Mem[2064] ← 9']], s:'<b>Memória.</b> MemWrite = 1: a memória grava 9 no endereço 2064. O 9 veio direto do registrador <code>$t2</code>.'},
+      {n:'Escreve', w:['pc4_mux','pcsrc_out'], t:[[PCT,'PC ← PC + 4']], s:'<b>Escreve.</b> RegWrite = 0: o sw não escreve em registrador nenhum. Só o PC avança.'}
+    ],
+    beq: [
+      {n:'Busca', w:FETCH, t:[[PCT,'PC = 0x00400000'],[IMT,'beq $t1, $t2, 25']], s:'<b>Busca.</b> A memória de instruções devolve <code>beq $t1, $t2, 25</code> e o somador calcula PC + 4 = 0x00400004.'},
+      {n:'Lê registradores', w:['rs','rt_read','rd1','rd2_a','rd2_mux','imm','ext_out'], t:[], s:'<b>Decodifica e lê.</b> Lê <code>$t1</code> = 4 e <code>$t2</code> = 4. O 25 passa pela extensão de sinal.'},
+      {n:'Executa (ALU)', w:['alusrc_out','alu_ctrl','ext_shift','shift_badd','pc4_badd'], t:[[ALT,'4 − 4 = 0'],[BAT,'0x00400004 + 100']], s:'<b>Executa.</b> A ALU subtrai: 4 − 4 = 0, então <b>Zero = 1</b>. Ao mesmo tempo o 25 é deslocado 2 bits (25 × 4 = 100) e o somador de cima faz (PC + 4) + 100.'},
+      {n:'Decide', w:['zero_and','and_mux','badd_mux'], t:[], s:'<b>Decide.</b> Branch = 1 E Zero = 1, então PCSrc = 1: o mux escolhe o endereço do desvio em vez de PC + 4.'},
+      {n:'Novo PC', w:['pcsrc_out'], t:[[PCT,'PC ← 0x00400068']], s:'<b>Novo PC.</b> PC = 0x00400004 + 100 = 0x00400068. Se os registradores fossem diferentes, Zero = 0 e o PC seria só PC + 4.'}
+    ]
+  };
   let h = '';
   for(const id in W) h += '<path class="w" id="dp-'+id+'" d="'+W[id]+'"/>';
-  const adder = (x,y) => '<polygon class="dg-box" points="'+[[x,y],[x+56,y+18],[x+56,y+38],[x,y+56],[x,y+34],[x+10,y+28],[x,y+22]].map(p=>p.join(',')).join(' ')+'"/><text class="dg-txt b" x="'+(x+34)+'" y="'+(y+33)+'" text-anchor="middle">+</text>';
+  const adder = (x,y) => '<polygon class="dg-box" points="'+adderPts(x,y)+'"/><text class="dg-txt b" x="'+(x+34)+'" y="'+(y+33)+'" text-anchor="middle">+</text>';
   const mux = (x,y,hh,a,b) => '<rect class="dg-box" x="'+x+'" y="'+y+'" width="18" height="'+hh+'" rx="9"/><text class="dg-txt m" x="'+(x+9)+'" y="'+(a+4)+'" text-anchor="middle">0</text><text class="dg-txt m" x="'+(x+9)+'" y="'+(b+4)+'" text-anchor="middle">1</text>';
-  const T = (x,y,t,c,anchor) => '<text class="dg-txt '+(c||'')+'" x="'+x+'" y="'+y+'"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+t+'</text>';
   h += '<rect class="dg-box" x="30" y="195" width="44" height="80" rx="4"/>'+T(52,240,'PC','b','middle');
   h += adder(120,40) + T(100,89,'4','m','middle');
   h += '<rect class="dg-box" x="120" y="180" width="110" height="110" rx="4"/>'+T(175,230,'Memória de','b','middle')+T(175,246,'instruções','b','middle');
@@ -2145,30 +2449,57 @@ function regInfoKey(i){
   h += '<rect class="dg-box" x="640" y="185" width="110" height="120" rx="4"/>'+T(695,248,'Memória de','b','middle')+T(695,264,'dados','b','middle')+T(646,212,'endereço','m')+T(646,279,'dado a escrever','m')+T(744,222,'lido','m','end');
   h += mux(790,205,80,268,225);
   h += T(420,40,'PC + 4','m','middle')+T(256,55,'op','m')+T(286,188,'rs','m')+T(286,212,'rt','m')+T(256,358,'imediato','m')+T(300,384,'funct','m')+T(596,208,'Zero','m')+T(714,112,'PCSrc','m')+T(746,58,'novo PC','m');
+  h += '<g id="dp-tags"></g>';
   svg.innerHTML = h;
   const pills = {RegDst:[277,228],RegWrite:[370,158],ALUSrc:[479,228],ALUOp:[642,336],MemRead:[695,176],MemWrite:[695,156],MemtoReg:[799,192],Branch:[593,126]};
   for(const k in pills){
     const g = document.createElementNS(SVGNS,'g'); g.setAttribute('class','pill'); g.id='pill-'+k;
     g.innerHTML = '<rect height="16" rx="8"/><text text-anchor="middle"></text>';
     g.dataset.x = pills[k][0]; g.dataset.y = pills[k][1];
-    svg.appendChild(g);
+    svg.insertBefore(g, svg.querySelector('#dp-tags'));
   }
-  function show(ins){
-    $$('#dp-seg button').forEach(b => b.classList.toggle('on', b.dataset.i===ins));
-    const act = new Set(common.concat(ACT[ins]));
-    for(const id in W) svg.querySelector('#dp-'+id).classList.toggle('on', act.has(id));
+  let ins = 'R', ph = -1, timer = null;
+  const say = $('#dp-say'), phBox = $('#dp-phases');
+  function setPills(){
     for(const k in SIG[ins]){
       const g = svg.querySelector('#pill-'+k), v = SIG[ins][k], txt = k+'='+v;
       const w = txt.length*6.6+12, x = +g.dataset.x, y = +g.dataset.y;
-      g.querySelector('rect').setAttribute('x', x-w/2); g.querySelector('rect').setAttribute('y', y-8); g.querySelector('rect').setAttribute('width', w);
+      const r = g.querySelector('rect'); r.setAttribute('x', x-w/2); r.setAttribute('y', y-8); r.setAttribute('width', w);
       const t = g.querySelector('text'); t.setAttribute('x', x); t.setAttribute('y', y+4); t.textContent = txt;
       g.setAttribute('class','pill'+(v==='0'||v==='00'?'':v==='X'?' vx':' v1'));
     }
-    $('#dp-say').innerHTML = SAY[ins];
-    $$('#dp-say code').forEach(el => el.innerHTML = hlLine(el.textContent));
   }
-  $('#dp-seg').addEventListener('click', e => { const b = e.target.closest('button'); if(b) show(b.dataset.i); });
-  show('R');
+  function draw(){
+    $$('#dp-seg button').forEach(b => b.classList.toggle('on', b.dataset.i===ins));
+    const phases = PH[ins];
+    phBox.innerHTML = phases.map((p,k) => '<button type="button" data-k="'+k+'" class="'+(k===ph?'on':(ph>=0&&k<ph?'done':''))+'">'+(k+1)+' · '+p.n+'</button>').join('');
+    let on, done = new Set(), tags = [];
+    if(ph<0){ on = new Set(common.concat(ACT[ins])); }
+    else {
+      on = new Set(phases[ph].w);
+      for(let k=0;k<ph;k++) phases[k].w.forEach(w => { if(!on.has(w)) done.add(w); });
+      tags = phases[ph].t;
+    }
+    for(const id in W){ const el = svg.querySelector('#dp-'+id); el.classList.toggle('on', on.has(id)); el.classList.toggle('done', done.has(id)); }
+    svg.querySelector('#dp-tags').innerHTML = tags.map(([p,t]) => tagSVG(p[0],p[1],t)).join('');
+    say.innerHTML = ph<0 ? SAY[ins] : '<span class="small">Fase '+(ph+1)+' de 5 · </span>'+phases[ph].s;
+    hlInline(say);
+    $('#dp-play').textContent = timer ? '⏸ Pausar' : '▶ Animar passo a passo';
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+  function go(k){ ph = Math.max(0, Math.min(4, k)); draw(); }
+  $('#dp-seg').addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; stop(); ins = b.dataset.i; ph = -1; setPills(); draw(); });
+  phBox.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; stop(); go(+b.dataset.k); });
+  $('#dp-next').onclick = () => { stop(); go(ph+1); };
+  $('#dp-prev').onclick = () => { stop(); go(ph<0?0:ph-1); };
+  $('#dp-all').onclick = () => { stop(); ph = -1; draw(); };
+  $('#dp-play').onclick = () => {
+    if(timer){ stop(); draw(); return; }
+    ph = 0; draw();
+    timer = setInterval(() => { if(ph>=4){ stop(); draw(); return; } ph++; draw(); }, 2200);
+    draw();
+  };
+  setPills(); draw();
 })();
 
 /* ---------- Monociclo: barras de tempo ---------- */
@@ -2264,9 +2595,10 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
   }
 })();
 
-/* ---------- Multiciclo: passos + FSM ---------- */
+/* ---------- Multiciclo: caminho de dados + passos + FSM ---------- */
 (function(){
-  const svg = $('#fsm-svg'); if(!svg) return;
+  const fsm = $('#fsm-svg'), dp = $('#mcdp-svg'); if(!fsm || !dp) return;
+  /* máquina de estados */
   const P = {0:[90,50],1:[300,50],2:[110,160],6:[330,160],8:[520,160],9:[680,160],3:[50,270],5:[180,270],7:[330,270],4:[50,380]};
   const NM = {0:['Busca',90,94,'middle'],1:['Decodifica',336,46,'start'],2:['Endereço',60,122,'middle'],6:['Executa (R)',366,164,'start'],8:['Desvio (beq)',520,204,'middle'],9:['Jump',680,204,'middle'],3:['Lê memória',86,300,'start'],5:['Escreve mem.',180,314,'middle'],7:['Fim do R',330,314,'middle'],4:['Escreve reg.',90,384,'start']};
   const E = [[0,1,''],[1,2,'lw/sw'],[1,6,'R'],[1,8,'beq'],[1,9,'j'],[2,3,'lw'],[2,5,'sw'],[3,4,''],[6,7,'']];
@@ -2280,6 +2612,18 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
     R:[B0,B1,{s:6,t:'Executa a conta',r:'ALUOut = A op B'},{s:7,t:'Escreve no registrador',r:'Reg[rd] = ALUOut'}],
     beq:[B0,B1,{s:8,t:'Compara e desvia',r:'se (A == B) PC = ALUOut'}],
     j:[B0,B1,{s:9,t:'Desvia',r:'PC = PC[31-28] || (IR[25-0] << 2)'}]
+  };
+  const SAYS = {
+    0:'<b>Busca (estado 0).</b> IorD = 0 manda o PC para a memória, que entrega a instrução ao IR (IRWrite). No mesmo ciclo a ALU calcula PC + 4 (ALUSrcA = 0, ALUSrcB = 01) e o PC já é atualizado (PCWrite, PCSource = 00).',
+    1:'<b>Decodifica (estado 1).</b> O controle lê o opcode no IR. O banco lê rs e rt e guarda em A e B. Por otimismo, a ALU já calcula o alvo de um possível desvio, PC + (imediato × 4), e guarda em ALUOut.',
+    2:'<b>Endereço (estado 2).</b> ALUSrcA = 1 e ALUSrcB = 10: a ALU faz A + imediato. O endereço fica guardado em ALUOut.',
+    3:'<b>Lê a memória (estado 3, lw).</b> IorD = 1: agora o endereço da memória vem da ALUOut, não do PC. O dado lido vai para o MDR.',
+    4:'<b>Escreve (estado 4, lw).</b> MemtoReg = 1 e RegDst = 0: o valor do MDR é escrito no registrador rt.',
+    5:'<b>Escreve na memória (estado 5, sw).</b> IorD = 1 e MemWrite: o valor de B é gravado na memória, no endereço que está na ALUOut.',
+    6:'<b>Executa (estado 6, tipo R).</b> A ALU faz A op B (ALUOp = 10: olha o campo funct). O resultado fica em ALUOut.',
+    7:'<b>Fim do R (estado 7).</b> MemtoReg = 0 e RegDst = 1: a ALUOut é escrita no registrador rd.',
+    8:'<b>Desvio (estado 8, beq).</b> A ALU subtrai A − B. Se der zero, PCWriteCond deixa o PC receber a ALUOut (o alvo calculado no estado 1).',
+    9:'<b>Jump (estado 9).</b> PCSource = 10: o PC recebe os 4 bits de cima do PC junto com IR[25-0] deslocado 2 bits.'
   };
   const r = 28;
   let h = '';
@@ -2298,27 +2642,94 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
     h += '<text x="'+nm[1]+'" y="'+nm[2]+'" text-anchor="'+nm[3]+'">'+nm[0]+'</text>';
     if(TERM.includes(+s)) h += '<text class="el" x="'+(x+22)+'" y="'+(y-26)+'">↩ 0</text>';
   }
-  svg.innerHTML = h;
-  let curIns = 'lw';
-  function hl(states, focus){
-    $$('g[data-s]', svg).forEach(g => g.classList.toggle('on', states.includes(+g.dataset.s) && (focus===undefined || +g.dataset.s===focus)));
-    $$('g[data-e]', svg).forEach(g => {
-      const [a,b] = g.dataset.e.split('-').map(Number);
+  fsm.innerHTML = h;
+
+  /* caminho de dados multiciclo */
+  const MW = {
+    pc_a:'M60,212 H66', pc_iord:'M66,212 H80', pc_srca:'M66,212 V110 H530 V170 H545',
+    iord_mem:'M98,225 H115', mem_ir:'M215,225 H228 V190 H240', mem_mdr:'M228,225 V300 H240',
+    ir_op:'M300,150 H330 V86', ir_rs:'M300,168 H360', ir_rt_a:'M300,186 H320', ir_rt_b:'M320,186 H360',
+    rt_dst:'M320,186 V222 H325', ir_rd:'M300,204 H312 V244 H325', ir_imm:'M300,226 H306 V372 H362',
+    regdst_out:'M343,233 H360', mdr_mtr:'M300,302 H325', mtr_out:'M343,291 H360',
+    rd1_a:'M470,180 H488', rd2_b:'M470,262 H488',
+    a_srca:'M518,180 H535 V194 H545', b_a:'M518,262 H524', b_srcb:'M524,262 H530 V246 H545', four:'M528,268 H545',
+    ext_out:'M438,372 H446', ext_srcb:'M446,372 H500 V290 H545', ext_shift:'M446,372 V412 H453', shift_srcb:'M517,412 H530 V312 H545',
+    srca_alu:'M563,182 H588', srcb_alu:'M563,280 H588', alu_aluout:'M650,230 H678', alu_pcsrc:'M664,230 V180 H752 V205 H770',
+    aluout_a:'M724,231 H742', aluout_pcsrc:'M742,231 H770', aluout_mtr:'M735,231 V430 H318 V278 H325', aluout_iord:'M742,231 V440 H74 V238 H80',
+    b_mem:'M524,262 V420 H105 V280 H115', ir_jump:'M285,140 V98 H646 V110 H660', jump_pcsrc:'M740,110 H760 V255 H770',
+    pcsrc_out:'M788,231 H810 V20 H10 V230 H20'
+  };
+  const box = (id,x,y,w,hh,label,cls) => '<rect class="dg-box" id="mc-'+id+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+hh+'" rx="4"/>'+(label?T(x+w/2,y+hh/2+4,label,cls||'b','middle'):'');
+  const mx = (id,x,y,hh,ins) => '<rect class="dg-box" id="mc-'+id+'" x="'+x+'" y="'+y+'" width="18" height="'+hh+'" rx="9"/>'+ins.map(([t,yy])=>T(x+9,yy+4,t,'m','middle')).join('');
+  let g = '';
+  for(const id in MW) g += '<path class="w" id="mcw-'+id+'" d="'+MW[id]+'"/>';
+  g += box('PC',20,195,40,70,'PC');
+  g += mx('IorD',80,200,50,[['0',212],['1',238]]) + T(89,194,'IorD','m','middle');
+  g += box('Mem',115,170,100,130,'') + T(165,222,'Memória','b','middle') + T(165,238,'instruções','m','middle') + T(165,252,'e dados','m','middle') + T(120,276,'dado escrito','m');
+  g += box('IR',240,140,60,100,'IR');
+  g += box('MDR',240,282,60,36,'MDR');
+  g += mx('RegDst',325,212,44,[['0',222],['1',244]]);
+  g += mx('MemtoReg',325,268,46,[['0',278],['1',302]]);
+  g += box('Regs',360,150,110,170,'Registradores');
+  g += box('A',488,165,30,30,'A') + box('B',488,247,30,30,'B');
+  g += mx('SrcA',545,158,48,[['0',170],['1',194]]) + T(545,150,'ALUSrcA','m');
+  g += mx('SrcB',545,232,96,[['0',246],['1',268],['2',290],['3',312]]) + T(545,344,'ALUSrcB','m') + T(522,272,'4','m','end');
+  g += '<ellipse class="dg-box2" id="mc-Ext" cx="400" cy="372" rx="38" ry="18"/>' + T(400,376,'ext. sinal','m','middle');
+  g += '<ellipse class="dg-box2" id="mc-Sh" cx="485" cy="412" rx="32" ry="14"/>' + T(485,416,'desl. 2','m','middle');
+  g += '<polygon class="dg-box" id="mc-ALU" points="588,165 650,195 650,265 588,295 588,250 600,232 588,214"/>' + T(624,236,'ALU','b','middle');
+  g += box('ALUOut',678,215,46,32,'') + T(701,235,'ALUOut','m','middle');
+  g += mx('PCSrc',770,192,76,[['0',205],['1',231],['2',255]]) + T(779,282,'PCSource','m','middle');
+  g += '<ellipse class="dg-box2" id="mc-ShJ" cx="700" cy="110" rx="40" ry="14"/>' + T(700,114,'desl. 2 (j)','m','middle');
+  g += '<ellipse class="dg-box2" id="mc-Ctrl" cx="330" cy="62" rx="62" ry="24"/>' + T(330,66,'Controle (FSM)','b','middle');
+  dp.innerHTML = g;
+  const ON = {
+    0:{w:['pc_a','pc_iord','iord_mem','mem_ir','pc_srca','srca_alu','four','srcb_alu','alu_pcsrc','pcsrc_out'], c:['PC','IorD','Mem','IR','SrcA','SrcB','ALU','PCSrc']},
+    1:{w:['ir_op','ir_rs','ir_rt_a','ir_rt_b','rd1_a','rd2_b','pc_a','pc_srca','srca_alu','ir_imm','ext_out','ext_shift','shift_srcb','srcb_alu','alu_aluout'], c:['Ctrl','Regs','A','B','SrcA','SrcB','Ext','Sh','ALU','ALUOut']},
+    2:{w:['a_srca','srca_alu','ir_imm','ext_out','ext_srcb','srcb_alu','alu_aluout'], c:['A','SrcA','Ext','SrcB','ALU','ALUOut']},
+    3:{w:['aluout_a','aluout_iord','iord_mem','mem_mdr'], c:['ALUOut','IorD','Mem','MDR']},
+    4:{w:['mdr_mtr','mtr_out','ir_rt_a','rt_dst','regdst_out'], c:['MDR','MemtoReg','RegDst','Regs']},
+    5:{w:['aluout_a','aluout_iord','iord_mem','b_a','b_mem'], c:['ALUOut','IorD','Mem','B']},
+    6:{w:['a_srca','srca_alu','b_a','b_srcb','srcb_alu','alu_aluout'], c:['A','B','SrcA','SrcB','ALU','ALUOut']},
+    7:{w:['aluout_a','aluout_mtr','mtr_out','ir_rd','regdst_out'], c:['ALUOut','MemtoReg','RegDst','Regs']},
+    8:{w:['a_srca','srca_alu','b_a','b_srcb','srcb_alu','aluout_a','aluout_pcsrc','pcsrc_out'], c:['A','B','SrcA','SrcB','ALU','ALUOut','PCSrc','PC']},
+    9:{w:['ir_jump','jump_pcsrc','pcsrc_out'], c:['IR','ShJ','PCSrc','PC']}
+  };
+  let curIns = 'lw', cur = 0, timer = null;
+  function paint(){
+    const st = STEPS[curIns], states = st.map(x=>x.s), s = st[cur].s;
+    $$('g[data-s]', fsm).forEach(gg => gg.classList.toggle('on', +gg.dataset.s===s));
+    $$('g[data-e]', fsm).forEach(gg => {
+      const [a,b] = gg.dataset.e.split('-').map(Number);
       const on = states.includes(a) && states.includes(b) && states.indexOf(b)===states.indexOf(a)+1;
-      g.querySelector('line').classList.toggle('eon', on);
-      g.querySelector('path').style.fill = on ? 'var(--wire-on)' : 'var(--wire)';
+      gg.querySelector('line').classList.toggle('eon', on);
+      gg.querySelector('path').style.fill = on ? 'var(--wire-on)' : 'var(--wire)';
     });
+    const on = ON[s];
+    for(const id in MW) dp.querySelector('#mcw-'+id).classList.toggle('on', on.w.includes(id));
+    $$('[id^="mc-"]', dp).forEach(el => el.classList.toggle('dg-on', on.c.includes(el.id.slice(3))));
+    $$('#mc-steps li').forEach((li,k) => { li.style.background = k===cur ? 'var(--accent-soft)' : ''; li.style.borderRadius = '8px'; li.style.padding = '4px 6px'; });
+    $('#mc-say').innerHTML = '<span class="small">Ciclo '+(cur+1)+' de '+st.length+' · </span>'+SAYS[s];
+    $('#mc-play').textContent = timer ? '⏸ Pausar' : '▶ Animar os ciclos';
   }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
   function show(ins){
-    curIns = ins;
+    curIns = ins; cur = 0;
     $$('#mc-seg button').forEach(b => b.classList.toggle('on', b.dataset.i===ins));
     const st = STEPS[ins];
-    $('#mc-steps').innerHTML = st.map((x,k) => '<li data-s="'+x.s+'" style="margin:0 0 10px;cursor:pointer"><b>Ciclo '+(k+1)+' · estado '+x.s+' · '+x.t+'</b><br><code style="white-space:normal">'+esc(x.r)+'</code><br><span class="small">Sinais: '+SG[x.s]+'</span></li>').join('') +
-      '<p style="margin:.2rem 0 0"><b>Total: '+st.length+' ciclos.</b> <span class="small">Clique num passo para destacar o estado.</span></p>';
-    hl(st.map(x=>x.s));
+    $('#mc-steps').innerHTML = st.map((x,k) => '<li data-k="'+k+'" style="margin:0 0 8px;cursor:pointer"><b>Ciclo '+(k+1)+' · estado '+x.s+' · '+x.t+'</b><br><code style="white-space:normal">'+esc(x.r)+'</code><br><span class="small">Sinais: '+SG[x.s]+'</span></li>').join('') +
+      '<p style="margin:.2rem 0 0"><b>Total: '+st.length+' ciclos.</b> <span class="small">Clique num ciclo para ver no desenho.</span></p>';
+    paint();
   }
-  $('#mc-steps').addEventListener('click', e => { const li = e.target.closest('li'); if(li) hl(STEPS[curIns].map(x=>x.s), +li.dataset.s); });
-  $('#mc-seg').addEventListener('click', e => { const b = e.target.closest('button'); if(b) show(b.dataset.i); });
+  $('#mc-steps').addEventListener('click', e => { const li = e.target.closest('li'); if(li){ stop(); cur = +li.dataset.k; paint(); } });
+  $('#mc-seg').addEventListener('click', e => { const b = e.target.closest('button'); if(b){ stop(); show(b.dataset.i); } });
+  $('#mc-next').onclick = () => { stop(); cur = Math.min(STEPS[curIns].length-1, cur+1); paint(); };
+  $('#mc-prev').onclick = () => { stop(); cur = Math.max(0, cur-1); paint(); };
+  $('#mc-play').onclick = () => {
+    if(timer){ stop(); paint(); return; }
+    cur = 0; paint();
+    timer = setInterval(() => { if(cur >= STEPS[curIns].length-1){ stop(); paint(); return; } cur++; paint(); }, 2200);
+    paint();
+  };
   show('lw');
 })();
 
@@ -2344,7 +2755,223 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
   draw();
 })();
 
-/* ---------- Simulador de pipeline (conflitos de dados) ---------- */
+/* =====================================================================
+   PIPELINE: parse, agenda (bolhas/adiantamento) e caminho de dados animado
+   ===================================================================== */
+const R3OPS = ['add','addu','sub','subu','and','or','nor','xor','slt','sltu'];
+const I2OPS = ['addi','addiu','andi','ori','xori','slti','sltiu'];
+function parsePipeLine(raw){
+  let s = splitComment(raw)[0];
+  s = s.replace(/^\s*[A-Za-z_][\w.\-]*\s*:/,'').trim();
+  if(!s) return null;
+  const op = s.split(/\s+/)[0].toLowerCase();
+  const regs = (s.match(/\$\w+/g)||[]).map(regIndex);
+  if(regs.some(r => r<0)) throw 'registrador inválido em "'+s+'"';
+  let dst = null, src = [], kind;
+  if(R3OPS.includes(op)){ if(regs.length!==3) throw '"'+s+'" precisa de 3 registradores'; dst = regs[0]; src = [[regs[1],'A'],[regs[2],'B']]; kind = 'R'; }
+  else if(I2OPS.includes(op)){ dst = regs[0]; src = [[regs[1],'A']]; kind = 'I'; }
+  else if(op==='lw'||op==='lb'){ dst = regs[0]; src = [[regs[1],'A']]; kind = 'lw'; }
+  else if(op==='sw'||op==='sb'){ src = [[regs[0],'B'],[regs[1],'A']]; kind = 'sw'; }
+  else if(op==='beq'||op==='bne'){ src = [[regs[0],'A'],[regs[1],'B']]; kind = 'beq'; }
+  else if(op==='lui'){ dst = regs[0]; kind = 'I'; }
+  else if(op==='nop'){ kind = 'nop'; }
+  else throw 'o pipeline aceita add, sub, and, or, slt, addi, lw, sw, beq, bne, nop ("'+op+'" não)';
+  src = src.filter(x => x[0]!==0);
+  return {text:s, op, dst: dst===0 ? null : dst, src, load: kind==='lw', kind};
+}
+function schedulePipe(list, fw){
+  const n = list.length, ex = [], fetch = [], fdi = [], deps = [];
+  for(let i=0;i<n;i++){
+    fetch[i] = i===0 ? 1 : fdi[i-1];
+    fdi[i] = i===0 ? 2 : ex[i-1];
+    let e = Math.max(fdi[i]+1, i>0 ? ex[i-1]+1 : 3);
+    const d = [];
+    list[i].src.forEach(([r, role]) => {
+      for(let p=i-1;p>=0;p--){ if(list[p].dst===r){
+        const need = fw ? (list[p].load ? ex[p]+2 : ex[p]+1) : ex[p]+3;
+        e = Math.max(e, need); d.push({r, p, role}); break; } }
+    });
+    ex[i] = e; deps[i] = d;
+  }
+  return {ex, fetch, fdi, deps, total: ex[n-1]+2, ideal: n+4};
+}
+function occupancy(list, S, c){
+  const o = {BI:null, DI:null, EX:null, MEM:null, ER:null};
+  list.forEach((ins,i) => {
+    if(c>=S.fetch[i] && c<S.fdi[i]) o.BI = {i, stall: c>S.fetch[i]};
+    else if(c>=S.fdi[i] && c<S.ex[i]) o.DI = {i, stall: c>S.fdi[i]};
+    else if(c===S.ex[i]) o.EX = {i};
+    else if(c===S.ex[i]+1) o.MEM = {i};
+    else if(c===S.ex[i]+2) o.ER = {i};
+  });
+  const bub = cc => cc>=1 && !list.some((x,i) => S.ex[i]===cc) && list.some((x,i) => S.fdi[i] < cc && cc < S.ex[i]);
+  if(!o.EX && bub(c)) o.EX = {bubble:true};
+  if(!o.MEM && bub(c-1)) o.MEM = {bubble:true};
+  if(!o.ER && bub(c-2)) o.ER = {bubble:true};
+  return o;
+}
+function forwardsAt(list, S, c, fw){
+  if(!fw) return [];
+  const out = [];
+  list.forEach((ins,i) => { if(S.ex[i]!==c) return;
+    S.deps[i].forEach(d => { const gap = S.ex[i]-S.ex[d.p]; if(gap===1) out.push({src:'exmem', role:d.role, r:d.r, p:d.p, i}); else if(gap===2) out.push({src:'memer', role:d.role, r:d.r, p:d.p, i}); });
+  });
+  return out;
+}
+const icol = i => 'var(--i'+(i%6)+')';
+const rnm = (ins, r) => /\$\d/.test(ins.text) ? '$'+r : '$'+REGN[r];
+function dotLbl(i, t){ return '<i class="idot" style="background:'+icol(i)+'"></i>'+(i+1)+'. '+codeLbl(t); }
+
+function makePipeDP(svg){
+  const W = {
+    pcmux_pc:'M38,205 H50', pc_im:'M82,205 H100', pc_add:'M88,205 V73 H100', four:'M96,124 V107 H100',
+    pc4_bidi:'M156,90 H170 V64 H198', pc4_back:'M170,64 V50 H14 V192 H22', im_bidi:'M186,205 H198',
+    target_back:'M678,81 H692 V36 H6 V218 H22', and_out:'M736,160 H760 V26 H30 V180',
+    di_bus:'M210,205 H226 M226,92 V376', op:'M226,92 H254', rs:'M226,175 H250', rt:'M226,200 H250', imm_di:'M226,330 H269',
+    rt_di:'M226,356 H422', rd_di:'M226,376 H422', ctrl_dix:'M346,92 H422', rd1_dix:'M360,185 H422', rd2_dix:'M360,244 H422',
+    ext_dix:'M341,330 H422', pc4_dix:'M210,64 H422',
+    pc4_ex:'M434,64 H560', shift_badd:'M533,110 H548 V98 H560', badd_exmem:'M616,81 H666', ctrl_ex:'M434,140 H666',
+    rd1_ex:'M434,185 H510', rd2_ex:'M434,244 H454', rd2_mux:'M454,244 H470', rd2_exmem:'M454,244 V296 H666',
+    alusrc_alu:'M486,259 H510', imm_a:'M434,330 H440', imm_ex:'M440,330 H458 V274 H470', imm_shift:'M440,330 V110 H477',
+    alu_exmem:'M572,220 H666', zero_exmem:'M572,198 H666', rt_ex:'M434,356 H600', rd_ex:'M434,376 H600', regdst_exmem:'M616,366 H666',
+    ctrl_m0:'M678,140 H700', branch_and:'M700,140 V156 H712', ctrl_mw:'M700,140 H844', zero_and:'M678,198 H704 V166 H712',
+    exmem_a:'M678,220 H692', exmem_alu:'M692,220 H700', mem_bypass:'M692,220 V318 H844', wd:'M678,296 H686 V280 H700',
+    mem_rd_out:'M810,236 H844', exmem_rd:'M678,366 H844',
+    ctrl_er:'M856,140 H892 V214', memer_rd:'M856,236 H870 V230 H884', memer_alu:'M856,318 H872 V258 H884',
+    wb_data:'M900,244 H912 V398 H240 V280 H250', wb_reg:'M856,366 H864 V390 H232 V250 H250'
+  };
+  const FW = {
+    A_exmem:'M684,214 V150 H490 V185 H508', B_exmem:'M684,226 V310 H494 V259 H508',
+    A_memer:'M906,236 V128 H486 V185 H508', B_memer:'M906,252 V330 H498 V259 H508'
+  };
+  const SETS = {
+    BI:{all:{w:['pcmux_pc','pc_im','pc_add','four','pc4_bidi','im_bidi'], c:['MuxPC','PC','Add4','IM']}},
+    DI:{all:{w:['di_bus','op','ctrl_dix','pc4_dix'], c:['Ctrl','Regs']},
+        R:{w:['rs','rt','rd1_dix','rd2_dix','rt_di','rd_di'], c:[]},
+        I:{w:['rs','rd1_dix','imm_di','ext_dix','rt_di'], c:['Ext']},
+        lw:{w:['rs','rd1_dix','imm_di','ext_dix','rt_di'], c:['Ext']},
+        sw:{w:['rs','rt','rd1_dix','rd2_dix','imm_di','ext_dix'], c:['Ext']},
+        beq:{w:['rs','rt','rd1_dix','rd2_dix','imm_di','ext_dix'], c:['Ext']}},
+    EX:{all:{w:['ctrl_ex'], c:['ALU']},
+        R:{w:['rd1_ex','rd2_ex','rd2_mux','alusrc_alu','alu_exmem','rd_ex','regdst_exmem'], c:['MuxSrc','MuxDst']},
+        I:{w:['rd1_ex','imm_a','imm_ex','alusrc_alu','alu_exmem','rt_ex','regdst_exmem'], c:['MuxSrc','MuxDst']},
+        lw:{w:['rd1_ex','imm_a','imm_ex','alusrc_alu','alu_exmem','rt_ex','regdst_exmem'], c:['MuxSrc','MuxDst']},
+        sw:{w:['rd1_ex','imm_a','imm_ex','alusrc_alu','alu_exmem','rd2_ex','rd2_exmem'], c:['MuxSrc']},
+        beq:{w:['rd1_ex','rd2_ex','rd2_mux','alusrc_alu','zero_exmem','imm_a','imm_shift','shift_badd','pc4_ex','badd_exmem'], c:['MuxSrc','Shift','Badd']}},
+    MEM:{R:{w:['exmem_a','mem_bypass','exmem_rd','ctrl_m0','ctrl_mw'], c:[]},
+        I:{w:['exmem_a','mem_bypass','exmem_rd','ctrl_m0','ctrl_mw'], c:[]},
+        lw:{w:['exmem_a','exmem_alu','mem_rd_out','exmem_rd','ctrl_m0','ctrl_mw'], c:['DM']},
+        sw:{w:['exmem_a','exmem_alu','wd'], c:['DM']},
+        beq:{w:['ctrl_m0','branch_and','zero_and','and_out'], c:['And']}},
+    ER:{R:{w:['memer_alu','wb_data','wb_reg','ctrl_er'], c:['MuxWB']},
+        I:{w:['memer_alu','wb_data','wb_reg','ctrl_er'], c:['MuxWB']},
+        lw:{w:['memer_rd','wb_data','wb_reg','ctrl_er'], c:['MuxWB']}}
+  };
+  const STC = {BI:100, DI:316, EX:550, MEM:761, ER:917};
+  const STN = {BI:'BI · busca', DI:'DI · decodifica', EX:'EX · executa', MEM:'MEM · memória', ER:'ER · escreve'};
+  const STV = {BI:'--st-bi', DI:'--st-di', EX:'--st-ex', MEM:'--st-mem', ER:'--st-er'};
+  const PT = (x,y,t,c,a) => '<text class="ptxt '+(c||'')+'" x="'+x+'" y="'+y+'" text-anchor="'+(a||'middle')+'">'+t+'</text>';
+  const mux = (id,x,y,hh,ins) => '<rect class="pcmp" data-id="pc-'+id+'" x="'+x+'" y="'+y+'" width="16" height="'+hh+'" rx="8"/>'+ins.map(([t,yy]) => PT(x+8,yy+4,t,'m')).join('');
+  let h = '';
+  for(const k in STC) h += PT(STC[k],16,STN[k],'h') + '<text class="ptxt ins" data-id="pl-'+k+'" x="'+STC[k]+'" y="36" text-anchor="middle"></text>';
+  h += '<g transform="translate(0,44)">';
+  [[2,196],[210,212],[434,232],[678,166],[856,122]].forEach(([x,w]) => h += '<rect class="pband" x="'+x+'" y="20" width="'+w+'" height="386" rx="8"/>');
+  for(const id in W) h += '<path class="pw" data-id="pw-'+id+'" d="'+W[id]+'"/>';
+  h += mux('MuxPC',22,180,50,[['0',192],['1',218]]);
+  h += '<rect class="pcmp" data-id="pc-PC" x="50" y="180" width="32" height="50" rx="4"/>'+PT(66,209,'PC');
+  h += '<polygon class="pcmp" data-id="pc-Add4" points="'+adderPts(100,62)+'"/>'+PT(134,95,'+')+PT(96,136,'4','m');
+  h += '<rect class="pcmp" data-id="pc-IM" x="100" y="160" width="86" height="110" rx="4"/>'+PT(143,210,'Memória de')+PT(143,225,'instruções');
+  h += '<ellipse class="pcmp" data-id="pc-Ctrl" cx="300" cy="92" rx="46" ry="20"/>'+PT(300,96,'Controle');
+  h += '<rect class="pcmp" data-id="pc-Regs" x="250" y="150" width="110" height="150" rx="4"/>'+PT(305,228,'Registradores');
+  h += '<ellipse class="pcmp" data-id="pc-Ext" cx="305" cy="330" rx="36" ry="15"/>'+PT(305,334,'ext. sinal','m');
+  h += mux('MuxSrc',470,232,56,[['0',244],['1',274]]);
+  h += '<polygon class="pcmp" data-id="pc-ALU" points="510,160 572,190 572,250 510,280 510,234 522,220 510,206"/>'+PT(545,224,'ALU');
+  h += '<ellipse class="pcmp" data-id="pc-Shift" cx="505" cy="110" rx="28" ry="13"/>'+PT(505,114,'desl. 2','m');
+  h += '<polygon class="pcmp" data-id="pc-Badd" points="'+adderPts(560,53)+'"/>'+PT(594,86,'+');
+  h += mux('MuxDst',600,344,44,[['0',356],['1',376]]);
+  h += '<rect class="pcmp" data-id="pc-DM" x="700" y="190" width="110" height="110" rx="4"/>'+PT(755,240,'Memória de')+PT(755,255,'dados');
+  h += '<path class="pcmp" data-id="pc-And" d="M712,150 H724 A12,10 0 0 1 724,170 H712 Z"/>'+PT(721,164,'E','m');
+  h += mux('MuxWB',884,214,56,[['1',230],['0',258]]);
+  [198,422,666,844].forEach((x,k) => h += '<rect class="preg" data-id="pr-'+k+'" x="'+x+'" y="56" width="12" height="336" rx="3"/>');
+  ['BI/DI','DI/EX','EX/MEM','MEM/ER'].forEach((t,k) => h += PT([204,428,672,850][k],410,t,'m'));
+  for(const id in FW) h += '<path class="fwc" data-id="pf-'+id+'" d="'+FW[id]+'" style="display:none"/>';
+  h += '</g>';
+  svg.innerHTML = h;
+  function update(list, occ, fws){
+    $$('.pw', svg).forEach(el => el.classList.remove('busy'));
+    $$('.pcmp', svg).forEach(el => el.classList.remove('busy'));
+    $$('.preg', svg).forEach(el => el.classList.remove('busy'));
+    ['BI','DI','EX','MEM','ER'].forEach((st,k) => {
+      const slot = occ[st], lbl = svg.querySelector('[data-id="pl-'+st+'"]');
+      if(slot && slot.i!==undefined){
+        const ins = list[slot.i], col = icol(slot.i), sets = SETS[st];
+        const parts = [sets.all, sets[ins.kind]].filter(Boolean);
+        parts.forEach(p => { (p.w||[]).forEach(id => { const el = svg.querySelector('[data-id="pw-'+id+'"]'); el.classList.add('busy'); el.style.setProperty('--ic', col); });
+                            (p.c||[]).forEach(id => { const el = svg.querySelector('[data-id="pc-'+id+'"]'); el.classList.add('busy'); el.style.setProperty('--ic', col); }); });
+        if(k>0){ const pr = svg.querySelector('[data-id="pr-'+(k-1)+'"]'); pr.classList.add('busy'); pr.style.setProperty('--ic', col); }
+        let t = ins.text.replace(/\s+/g,' '); if(t.length>17) t = t.slice(0,16)+'…';
+        lbl.textContent = t + (slot.stall ? ' (parado)' : '');
+        lbl.style.fill = col;
+      } else if(slot && slot.bubble){ lbl.textContent = 'bolha (nop)'; lbl.style.fill = 'var(--muted)'; }
+      else { lbl.textContent = '—'; lbl.style.fill = 'var(--muted)'; }
+    });
+    for(const id in FW) svg.querySelector('[data-id="pf-'+id+'"]').style.display = 'none';
+    (fws||[]).forEach(f => { svg.querySelector('[data-id="pf-'+f.role+'_'+f.src+'"]').style.display = ''; });
+  }
+  return {update};
+}
+const ACTION = {
+  BI:(o)=> 'busca '+o.op,
+  DI:(o)=> o.op+' é decodificada e lê os registradores',
+  EX:(o)=> o.kind==='lw'||o.kind==='sw' ? 'a ALU calcula o endereço do '+o.op : o.kind==='beq' ? 'a ALU compara (subtrai) e o somador calcula o alvo' : o.kind==='nop' ? 'nop: nada' : 'a ALU faz a conta do '+o.op,
+  MEM:(o)=> o.kind==='lw' ? 'lw lê a memória de dados' : o.kind==='sw' ? 'sw escreve na memória' : o.kind==='beq' ? 'beq decide se desvia' : o.op+' só passa (não usa a memória)',
+  ER:(o)=> o.dst!==null && o.dst!==undefined ? o.op+' escreve '+rnm(o,o.dst)+' no banco de registradores' : o.op+' não escreve nada'
+};
+function cycleSay(list, occ, fws, c){
+  const parts = ['BI','DI','EX','MEM','ER'].map(st => {
+    const s = occ[st];
+    let t;
+    if(s && s.i!==undefined) t = '<span style="color:'+icol(s.i)+';font-weight:700">'+ACTION[st](list[s.i])+'</span>'+(s.stall?' (parado)':'');
+    else if(s && s.bubble) t = 'bolha';
+    else t = '—';
+    return '<b>'+st+'</b>: '+t;
+  });
+  let txt = '<b>CC'+c+'</b> · '+parts.join(' · ');
+  fws.forEach(f => { txt += '<br>↪ <b>Adiantamento</b>: '+rnm(list[f.i],f.r)+' vai direto do registrador '+(f.src==='exmem'?'EX/MEM':'MEM/ER')+' para a entrada '+f.role+' da ALU (instrução '+(f.p+1)+' → '+(f.i+1)+').'; });
+  return txt;
+}
+
+/* pipeline animado da seção 2.5 */
+(function(){
+  const svg = $('#ppdp-svg'); if(!svg) return;
+  const dp = makePipeDP(svg);
+  const list = ['lw $10, 20($1)','sub $11, $2, $3','and $12, $4, $5','or $13, $6, $7','add $14, $8, $9'].map(parsePipeLine);
+  const S = schedulePipe(list, true);
+  let c = 1, timer = null;
+  function rows(){
+    return list.map((ins,i) => { const cells = {}; ST.forEach((s,k) => cells[S.ex[i]-2+k] = {cls:s, txt:s}); return {label:dotLbl(i, ins.text), cells}; });
+  }
+  function draw(){
+    const occ = occupancy(list, S, c);
+    dp.update(list, occ, []);
+    $('#ppdp-say').innerHTML = cycleSay(list, occ, [], c) + (c===5 ? '<br><b>Pipeline cheio:</b> 5 instruções ao mesmo tempo, cada uma num estágio.' : '');
+    renderGrid($('#ppdp-grid'), rows(), S.total, c);
+    $('#ppdp-play').textContent = timer ? '⏸ Pausar' : '▶ Animar';
+  }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+  $('#ppdp-next').onclick = () => { stop(); c = Math.min(S.total, c+1); draw(); };
+  $('#ppdp-prev').onclick = () => { stop(); c = Math.max(1, c-1); draw(); };
+  $('#ppdp-reset').onclick = () => { stop(); c = 1; draw(); };
+  $('#ppdp-play').onclick = () => {
+    if(timer){ stop(); draw(); return; }
+    if(c>=S.total) c = 1;
+    timer = setInterval(() => { if(c>=S.total){ stop(); draw(); return; } c++; draw(); }, 1600);
+    draw();
+  };
+  draw();
+})();
+
+/* ---------- Simulador de conflitos de dados ---------- */
 (function(){
   const ta = $('#pp-code'); if(!ta) return;
   const PRE = [
@@ -2359,59 +2986,25 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
   ];
   const sel = $('#pp-preset');
   sel.innerHTML = PRE.map((p,i) => '<option value="'+i+'">'+esc(p[0])+'</option>').join('');
-  let fw = true, sched = null, cur = 0;
-  function parseLine(raw){
-    let s = raw; const ci = commentIndex(s); if(ci>=0) s = s.slice(0,ci);
-    s = s.replace(/^\s*[A-Za-z_][\w.\-]*\s*:/,'').trim();
-    if(!s) return null;
-    const op = s.split(/\s+/)[0].toLowerCase();
-    const regs = (s.match(/\$\w+/g)||[]).map(regIndex);
-    if(regs.some(r => r<0)) throw 'registrador inválido em "'+s+'"';
-    const R3 = ['add','addu','sub','subu','and','or','nor','slt','sltu'];
-    const I2 = ['addi','addiu','andi','ori','slti'];
-    let dst = null, srcs = [], load = false;
-    if(R3.includes(op)){ if(regs.length!==3) throw '"'+s+'" precisa de 3 registradores'; dst = regs[0]; srcs = [regs[1],regs[2]]; }
-    else if(I2.includes(op)){ dst = regs[0]; srcs = [regs[1]]; }
-    else if(op==='lw'||op==='lb'){ dst = regs[0]; srcs = [regs[1]]; load = true; }
-    else if(op==='sw'||op==='sb'){ srcs = [regs[0],regs[1]]; }
-    else if(op==='beq'||op==='bne'){ srcs = [regs[0],regs[1]]; }
-    else if(op==='lui'){ dst = regs[0]; }
-    else if(op==='nop'){ }
-    else throw 'o simulador de pipeline aceita add, sub, and, or, slt, addi, lw, sw, beq, bne, nop ("'+op+'" não)';
-    return {text:s, op, dst, srcs:srcs.filter(r => r!==0), load};
-  }
-  function schedule(list){
-    const n = list.length, ex = [], fetch = [], fdi = [], deps = [];
-    for(let i=0;i<n;i++){
-      fetch[i] = i===0 ? 1 : fdi[i-1];
-      fdi[i] = i===0 ? 2 : ex[i-1];
-      let e = Math.max(fdi[i]+1, i>0 ? ex[i-1]+1 : 3);
-      const d = [];
-      list[i].srcs.forEach(r => {
-        for(let p=i-1;p>=0;p--){ if(list[p].dst===r){
-          const need = fw ? (list[p].load ? ex[p]+2 : ex[p]+1) : ex[p]+3;
-          e = Math.max(e, need); d.push({r, p}); break; } }
-      });
-      ex[i] = e; deps[i] = d;
-    }
-    return {ex, fetch, fdi, deps, total: ex[n-1]+2, ideal: n+4};
-  }
-  function rowsFor(list, S){
+  const dp = makePipeDP($('#pp-svg'));
+  let fw = true, sched = null, cur = 0, list = [], timer = null;
+  function rowsFor(){
+    const S = sched;
     return list.map((ins,i) => {
       const cells = {};
       for(let c=S.fetch[i]; c<S.fdi[i]; c++) cells[c] = c===S.fetch[i] ? {cls:'BI',txt:'BI'} : {cls:'stall',txt:'BI',title:'parado no BI'};
       for(let c=S.fdi[i]; c<S.ex[i]; c++) cells[c] = c===S.fdi[i] ? {cls:'DI',txt:'DI'} : {cls:'stall',txt:'DI',title:'parado no DI (bolha no EX)'};
       const exc = {cls:'EX', txt:'EX'};
-      if(fw){ const f = S.deps[i].filter(d => S.ex[i]-S.ex[d.p] <= 2); if(f.length){ exc.cls += ' fw'; exc.title = 'recebe '+f.map(d=>'$'+REGN[d.r]).join(', ')+' adiantado'; } }
+      if(fw){ const f = S.deps[i].filter(d => S.ex[i]-S.ex[d.p] <= 2); if(f.length){ exc.cls += ' fw'; exc.title = 'recebe '+f.map(d=>rnm(ins,d.r)).join(', ')+' adiantado'; } }
       cells[S.ex[i]] = exc; cells[S.ex[i]+1] = {cls:'MEM',txt:'MEM'}; cells[S.ex[i]+2] = {cls:'ER',txt:'ER'};
-      return {label:(i+1)+'. '+codeLbl(ins.text), cells};
+      return {label:dotLbl(i, ins.text), cells};
     });
   }
-  function notes(list, S){
-    const out = [];
+  function notes(){
+    const S = sched, out = [];
     list.forEach((ins,i) => {
       S.deps[i].forEach(({r,p}) => {
-        const R = '<span class="rg '+famOf(r)+'">$'+REGN[r]+'</span>';
+        const R = '<span class="rg '+famOf(r)+'">'+rnm(ins,r)+'</span>';
         const who = (p+1)+'. '+codeLbl(list[p].text);
         const me = (i+1)+'. '+codeLbl(ins.text);
         const gap = S.ex[i]-S.ex[p];
@@ -2430,40 +3023,38 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
     if(!out.length) out.push('Nenhuma dependência de dados entre as instruções: o pipeline anda sem parar.');
     return out;
   }
-  function cycleText(list, S, c){
-    const stage = {BI:[],DI:[],EX:[],MEM:[],ER:[]};
-    list.forEach((ins,i) => {
-      const nm = (i+1)+'. '+ins.op;
-      if(c>=S.fetch[i] && c<S.fdi[i]) stage.BI.push(nm+(c>S.fetch[i]?' (parado)':''));
-      else if(c>=S.fdi[i] && c<S.ex[i]) stage.DI.push(nm+(c>S.fdi[i]?' (parado)':''));
-      else if(c===S.ex[i]) stage.EX.push(nm);
-      else if(c===S.ex[i]+1) stage.MEM.push(nm);
-      else if(c===S.ex[i]+2) stage.ER.push(nm);
-    });
-    const exEmpty = !stage.EX.length && list.some((ins,i) => S.fdi[i] < c && c < S.ex[i]);
-    return '<b>CC'+c+':</b> '+['BI','DI','EX','MEM','ER'].map(k => k+' = '+(stage[k].length?stage[k].join(', '):(k==='EX'&&exEmpty?'bolha':'—'))).join(' · ');
-  }
-  let list = [];
   function run(){
+    stop();
     try{
-      list = ta.value.split('\n').map(parseLine).filter(Boolean);
+      list = ta.value.split('\n').map(parsePipeLine).filter(Boolean);
       if(!list.length) throw 'escreva pelo menos uma instrução';
       if(list.length>12) throw 'use no máximo 12 instruções';
-      sched = schedule(list); cur = 0; draw();
-    }catch(e){ $('#pp-grid').innerHTML = '<div class="msg err">'+esc(e)+'</div>'; $('#pp-notes').innerHTML=''; $('#pp-sum').textContent=''; $('#pp-cycle').textContent=''; }
+      sched = schedulePipe(list, fw); cur = 1; draw();
+    }catch(e){ sched = null; $('#pp-grid').innerHTML = '<div class="msg err">'+esc(e)+'</div>'; $('#pp-notes').innerHTML=''; $('#pp-sum').textContent=''; $('#pp-cycle').textContent=''; $('#pp-dpsay').textContent=''; }
   }
   function draw(){
     const S = sched;
-    renderGrid($('#pp-grid'), rowsFor(list, S), S.total, cur);
-    $('#pp-notes').innerHTML = notes(list, S).map(x => '<li>'+x+'</li>').join('');
-    const b = S.total - S.ideal;
-    $('#pp-sum').innerHTML = 'Total: '+S.total+' ciclos · ideal: '+S.ideal+' · bolhas: '+b+' ('+(fw?'com':'sem')+' adiantamento)';
-    $('#pp-cycle').innerHTML = cur ? cycleText(list, S, cur) : 'Use "ciclo ▸" para ver o que cada estágio faz em cada ciclo.';
+    renderGrid($('#pp-grid'), rowsFor(), S.total, cur);
+    $('#pp-notes').innerHTML = notes().map(x => '<li>'+x+'</li>').join('');
+    $('#pp-sum').innerHTML = 'Total: '+S.total+' ciclos · ideal: '+S.ideal+' · bolhas: '+(S.total-S.ideal)+' ('+(fw?'com':'sem')+' adiantamento)';
+    const occ = occupancy(list, S, cur), fws = forwardsAt(list, S, cur, fw);
+    dp.update(list, occ, fws);
+    $('#pp-cycle').innerHTML = cycleSay(list, occ, fws, cur);
+    $('#pp-dpsay').innerHTML = 'O desenho mostra o ciclo CC'+cur+'. Setas tracejadas laranja = adiantamento. Estágio com "bolha" = nop inserido pela unidade de detecção de conflitos.';
+    $('#pp-play').textContent = timer ? '⏸ Pausar' : '▶ Animar';
   }
+  function stop(){ if(timer){ clearInterval(timer); timer = null; } }
   sel.onchange = () => { ta.value = PRE[+sel.value][1]; run(); };
   $('#pp-run').onclick = run;
-  $('#pp-next').onclick = () => { if(!sched) return; cur = Math.min(sched.total, cur+1); draw(); };
-  $('#pp-prev').onclick = () => { if(!sched) return; cur = Math.max(0, cur-1); draw(); };
+  $('#pp-next').onclick = () => { if(!sched) return; stop(); cur = Math.min(sched.total, cur+1); draw(); };
+  $('#pp-prev').onclick = () => { if(!sched) return; stop(); cur = Math.max(1, cur-1); draw(); };
+  $('#pp-play').onclick = () => {
+    if(!sched) return;
+    if(timer){ stop(); draw(); return; }
+    if(cur>=sched.total) cur = 1;
+    timer = setInterval(() => { if(cur>=sched.total){ stop(); draw(); return; } cur++; draw(); }, 1600);
+    draw();
+  };
   $('#pp-fw').addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; fw = b.dataset.i==='1'; $$('#pp-fw button').forEach(x => x.classList.toggle('on', x===b)); run(); });
   ta.value = PRE[2][1]; sel.value = '2'; run();
 })();
@@ -2507,24 +3098,368 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
   el.innerHTML = h;
 })();
 
-/* ---------- Simulador MIPS ---------- */
+/* =====================================================================
+   MEMÓRIA: calculadora de endereço e lw/sw animados
+   ===================================================================== */
+function parseNumber(tok){
+  tok = String(tok).trim();
+  let m;
+  if((m = tok.match(/^'(\\?.)'$/))){ const c = m[1]; const map = {'\\n':10,'\\t':9,'\\0':0,'\\\\':92,"\\'":39,'\\"':34}; return c.length===2 ? (map[c]!==undefined ? map[c] : c.charCodeAt(1)) : c.charCodeAt(0); }
+  if(/^[+-]?0x[0-9a-f]+$/i.test(tok)){ const neg = tok[0]==='-'; const v = parseInt(tok.replace(/^[+-]/,''),16); return neg ? -v : v; }
+  if(/^[+-]?\d+$/.test(tok)) return parseInt(tok,10);
+  return null;
+}
 (function(){
-  const view = $('#sim-view'); if(!view) return;
-  const BASE = 0x00400000;
-  const hex = v => '0x'+(v>>>0).toString(16).toUpperCase().padStart(8,'0');
-  const fmtv = v => (Math.abs(v) >= 65536) ? hex(v) : String(v);
+  const strip = $('#addr-strip'); if(!strip) return;
+  const VALS = [7,3,12,5,9,4,15,8,6,2], STR = 'PROVA MIPS';
+  let mode = 'w';
+  const baseEl = $('#addr-base'), iEl = $('#addr-i');
+  function draw(){
+    const i = +iEl.value; $('#addr-iv').textContent = i;
+    let base = parseNumber(baseEl.value), bad = false;
+    if(base===null || base<0){ base = 1000; bad = true; }
+    const hx = /^0x/i.test(baseEl.value.trim());
+    const fa = v => hx ? '0x'+v.toString(16).toUpperCase().padStart(8,'0') : String(v);
+    const sz = mode==='w' ? 4 : 1, nm = mode==='w' ? 'A' : 's';
+    strip.innerHTML = Array.from({length:10}, (_,k) => {
+      const v = mode==='w' ? VALS[k] : "'"+STR[k]+"'";
+      return '<div class="'+(k===i?'cur':'')+'"><span class="ix">'+nm+'['+k+']</span><span class="vl">'+v+'</span><span class="ad">'+fa(base+k*sz)+'</span></div>';
+    }).join('');
+    const addr = base + i*sz;
+    $('#addr-formula').innerHTML = (bad?'<span style="color:var(--bad)">base inválida, usando 1000 · </span>':'')+'endereço de '+nm+'['+i+'] = base + i × '+sz+' = '+fa(base)+' + '+i+' × '+sz+' = <b>'+fa(addr)+'</b>' + (mode==='w' ? ' &nbsp;(deslocamento = '+(i*4)+' bytes)' : '');
+    const ch = STR[i], code = STR.charCodeAt(i);
+    if(mode==='w'){
+      $('#addr-const').innerHTML = hlBlock('lw  $t0, '+(i*4)+'($s3)    # $t0 = A['+i+'] = '+VALS[i]+'   ('+i+' × 4 = '+(i*4)+')');
+      $('#addr-var').innerHTML = hlBlock('add $t1, $s4, $s4   # $t1 = 2 × i = '+(2*i)+'\nadd $t1, $t1, $t1   # $t1 = 4 × i = '+(4*i)+'\nadd $t1, $t1, $s3   # $t1 = '+fa(base)+' + '+(4*i)+' = '+fa(addr)+'\nlw  $t0, 0($t1)     # $t0 = A['+i+'] = '+VALS[i]);
+    } else {
+      $('#addr-const').innerHTML = hlBlock("lb  $t0, "+i+"($s3)    # $t0 = s["+i+"] = '"+ch+"' (código "+code+")");
+      $('#addr-var').innerHTML = hlBlock("add $t1, $s3, $s4   # $t1 = "+fa(base)+" + "+i+" = "+fa(addr)+"  (char = 1 byte: sem × 4)\nlb  $t0, 0($t1)     # $t0 = s["+i+"] = '"+ch+"'");
+    }
+  }
+  $('#addr-mode').addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; mode = b.dataset.i; $$('#addr-mode button').forEach(x => x.classList.toggle('on', x===b)); draw(); });
+  iEl.addEventListener('input', draw); baseEl.addEventListener('input', draw);
+  $('#addr-prev').onclick = () => { iEl.value = Math.max(0, +iEl.value-1); draw(); };
+  $('#addr-next').onclick = () => { iEl.value = Math.min(9, +iEl.value+1); draw(); };
+  draw();
+})();
+(function(){
+  const host = $('#lsm'); if(!host) return;
+  const INIT_M = [7,3,12,5,9,4];
+  let regs, mem, busy = false;
+  const RN = ['$s3','$t0','$t1','$t2'];
+  function reset(){ regs = {'$s3':1000,'$t0':0,'$t1':0,'$t2':0}; mem = INIT_M.slice(); draw(); $('#lsm-say').innerHTML = 'Clique numa instrução acima. A base do vetor A está em <span class="rg s">$s3</span> = 1000.'; }
+  function draw(){
+    $('#lsm-regs').innerHTML = RN.map(r => '<div class="rr rg '+famTok(r)+'" data-r="'+r+'"><span>'+r+'</span><span class="v">'+regs[r]+'</span></div>').join('');
+    $('#lsm-mem').innerHTML = mem.map((v,k) => '<div data-k="'+k+'"><span class="ix">A['+k+']</span><span class="vl">'+v+'</span><span class="ad">'+(1000+4*k)+'</span></div>').join('');
+  }
+  function flash(el){ el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 900); }
+  function fly(fromEl, toEl, text, done){
+    if(reduceMotion){ done(); return; }
+    const hr = host.getBoundingClientRect(), a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+    const chip = document.createElement('div'); chip.className = 'fly'; chip.textContent = text; host.appendChild(chip);
+    const cw = chip.offsetWidth, ch = chip.offsetHeight;
+    const x0 = a.left-hr.left+a.width/2-cw/2, y0 = a.top-hr.top+a.height/2-ch/2, x1 = b.left-hr.left+b.width/2-cw/2, y1 = b.top-hr.top+b.height/2-ch/2;
+    chip.style.left = x0+'px'; chip.style.top = y0+'px';
+    chip.getBoundingClientRect();
+    chip.style.transform = 'translate('+(x1-x0)+'px,'+(y1-y0)+'px)';
+    let fin = false; const end = () => { if(fin) return; fin = true; chip.remove(); done(); };
+    chip.addEventListener('transitionend', end); setTimeout(end, 1300);
+  }
+  const say = $('#lsm-say');
+  function err(t){ say.innerHTML = '<span style="color:var(--bad);font-weight:700">'+t+'</span>'; }
+  function exec(text){
+    if(busy) return;
+    const s = text.trim();
+    let m;
+    const okR = r => RN.includes(r);
+    if((m = s.match(/^(lw|sw)\s+(\$\w+)\s*,\s*(-?\d+)?\s*\(\s*(\$\w+)\s*\)$/i))){
+      const op = m[1].toLowerCase(), rt = m[2].toLowerCase(), off = m[3] ? parseInt(m[3],10) : 0, base = m[4].toLowerCase();
+      if(!okR(rt) || !okR(base)) return err('Neste exemplo use só '+RN.join(', ')+'.');
+      const addr = regs[base] + off;
+      const steps = ['<li><b>Endereço</b> = '+base+' + '+off+' = '+regs[base]+' + '+off+' = <b>'+addr+'</b></li>'];
+      if(addr % 4 !== 0){ say.innerHTML = '<ol>'+steps.join('')+'<li style="color:var(--bad)"><b>Erro de alinhamento:</b> '+addr+' não é múltiplo de 4. Palavras começam em 1000, 1004, 1008… O deslocamento tem que ser i × 4.</li></ol>'; return; }
+      const k = (addr-1000)/4;
+      if(k<0 || k>5) return err('O endereço '+addr+' está fora do vetor desenhado (1000 a 1020).');
+      steps.push('<li>'+addr+' − 1000 = '+(addr-1000)+' bytes = '+k+' palavra(s) depois da base → é o <b>A['+k+']</b></li>');
+      const cell = $('#lsm-mem [data-k="'+k+'"]'), row = $('#lsm-regs [data-r="'+rt+'"]');
+      flash(cell);
+      if(op==='lw'){
+        steps.push('<li><b>lw</b> copia A['+k+'] = '+mem[k]+' da memória para <b>'+rt+'</b></li>');
+        say.innerHTML = '<ol>'+steps.join('')+'</ol>'; busy = true;
+        fly(cell, row, String(mem[k]), () => { regs[rt] = mem[k]; draw(); flash($('#lsm-regs [data-r="'+rt+'"]')); busy = false; });
+      } else {
+        steps.push('<li><b>sw</b> copia '+rt+' = '+regs[rt]+' do registrador para A['+k+'] na memória</li>');
+        say.innerHTML = '<ol>'+steps.join('')+'</ol>'; busy = true;
+        fly(row, cell, String(regs[rt]), () => { mem[k] = regs[rt]; draw(); flash($('#lsm-mem [data-k="'+k+'"]')); busy = false; });
+      }
+      return;
+    }
+    if((m = s.match(/^(add|sub)\s+(\$\w+)\s*,\s*(\$\w+)\s*,\s*(\$\w+)$/i))){
+      const [, op, rd, ra, rb] = m.map(x => x.toLowerCase());
+      if(![rd,ra,rb].every(okR)) return err('Neste exemplo use só '+RN.join(', ')+'.');
+      const v = op==='add' ? regs[ra]+regs[rb] : regs[ra]-regs[rb];
+      say.innerHTML = '<ol><li>Não usa a memória: só registradores.</li><li>'+rd+' = '+ra+' '+(op==='add'?'+':'−')+' '+rb+' = '+regs[ra]+' '+(op==='add'?'+':'−')+' '+regs[rb]+' = <b>'+v+'</b></li></ol>';
+      regs[rd] = v; draw(); flash($('#lsm-regs [data-r="'+rd+'"]')); return;
+    }
+    if((m = s.match(/^addi\s+(\$\w+)\s*,\s*(\$\w+)\s*,\s*(-?\d+)$/i))){
+      const rd = m[1].toLowerCase(), ra = m[2].toLowerCase(), k = parseInt(m[3],10);
+      if(![rd,ra].every(okR)) return err('Neste exemplo use só '+RN.join(', ')+'.');
+      const v = regs[ra]+k; say.innerHTML = '<ol><li>'+rd+' = '+ra+' + '+k+' = '+regs[ra]+' + '+k+' = <b>'+v+'</b></li></ol>';
+      regs[rd] = v; draw(); flash($('#lsm-regs [data-r="'+rd+'"]')); return;
+    }
+    err('Escreva algo como lw $t0, 8($s3) · sw $t1, 4($s3) · add $t0, $t0, $t1 · addi $s3, $s3, 4');
+  }
+  ['lw $t0, 8($s3)','lw $t1, 16($s3)','add $t0, $t0, $t1','sw $t0, 4($s3)','sw $t1, 20($s3)','addi $s3, $s3, 4','lw $t0, 6($s3)'].forEach(t => {
+    const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.innerHTML = '<code>'+hlLine(t)+'</code>';
+    b.onclick = () => { $('#lsm-in').value = t; exec(t); }; $('#lsm-btns').appendChild(b);
+  });
+  $('#lsm-go').onclick = () => exec($('#lsm-in').value);
+  $('#lsm-in').addEventListener('keydown', e => { if(e.key==='Enter') exec($('#lsm-in').value); });
+  $('#lsm-reset').onclick = () => { if(!busy) reset(); };
+  reset();
+})();
+
+/* =====================================================================
+   LABORATÓRIO: montador + simulador MIPS
+   ===================================================================== */
+const TEXT_BASE = 0x00400000, DATA_BASE = 0x10010000, SP_INIT = 0x7FFFFFFC, GP_INIT = 0x10008000, STACK_LOW = 0x7F000000;
+const hex8 = v => '0x'+(v>>>0).toString(16).toUpperCase().padStart(8,'0');
+function splitArgs(s){
+  const out = []; let cur = '', q = '';
+  for(let i=0;i<s.length;i++){ const c = s[i];
+    if(q){ cur += c; if(c==='\\'){ cur += s[++i]||''; continue; } if(c===q) q=''; continue; }
+    if(c==='"'||c==="'"){ q = c; cur += c; continue; }
+    if(c===','){ out.push(cur.trim()); cur = ''; continue; }
+    cur += c;
+  }
+  if(cur.trim()) out.push(cur.trim());
+  return out;
+}
+function unq(lit){
+  const b = lit.slice(1,-1); let o = '';
+  for(let i=0;i<b.length;i++){ const c = b[i]; if(c==='\\'){ const n = b[++i]; o += n==='n'?'\n':n==='t'?'\t':n==='0'?'\0':n; } else o += c; }
+  return o;
+}
+const EXAM_WARN = {mult:'mult',multu:'multu',mul:'mul',div:'div',divu:'divu'};
+const PSEUDO_CMP = ['blt','bgt','ble','bge'];
+function assemble(src){
+  const lines = src.split(/\r?\n/), errors = [], labels = {}, labelAt = {};
+  const text = [], dataItems = [];
+  let seg = 'text', dptr = DATA_BASE, pendT = [], pendD = [];
+  const err = (li, msg) => errors.push({line:li, msg});
+  const defLabel = (li, name) => { const k = name.toLowerCase(); if(labels[k]) err(li, 'o label "'+name+'" aparece duas vezes'); labels[k] = {name, seg:null, addr:0}; return k; };
+  const placeD = () => { pendD.forEach(k => { labels[k].seg = 'data'; labels[k].addr = dptr; (labelAt[dptr] = labelAt[dptr] || []).push(labels[k].name); }); pendD = []; };
+  lines.forEach((raw, li) => {
+    let s = splitComment(raw)[0].trim(), m;
+    while((m = s.match(/^([A-Za-z_][\w.\-]*)\s*:\s*/))){ const k = defLabel(li, m[1]); (seg==='text' ? pendT : pendD).push(k); s = s.slice(m[0].length); }
+    if(!s) return;
+    if(s[0]==='.'){
+      const sp = s.search(/\s/), dir = (sp<0?s:s.slice(0,sp)).toLowerCase(), rest = sp<0 ? '' : s.slice(sp).trim();
+      if(dir==='.data'){ seg = 'data'; return; }
+      if(dir==='.text'){ seg = 'text'; return; }
+      if(['.globl','.global','.ent','.end','.extern','.set'].includes(dir)) return;
+      if(seg!=='data'){ err(li, dir+' só pode aparecer dentro de .data'); return; }
+      if(dir==='.align'){ const n = parseNumber(rest); if(n===null||n<0||n>3){ err(li,'.align precisa de 0 a 3'); return; } const a = 1<<n; dptr = Math.ceil(dptr/a)*a; placeD(); return; }
+      if(dir==='.word'||dir==='.half'){
+        const sz = dir==='.word' ? 4 : 2; dptr = Math.ceil(dptr/sz)*sz; placeD();
+        const vals = [];
+        splitArgs(rest).forEach(t => { const mm = t.match(/^(.+):(\d+)$/); if(mm){ for(let k=0;k<+mm[2];k++) vals.push(mm[1].trim()); } else vals.push(t); });
+        if(!vals.length){ err(li, dir+' precisa de pelo menos um valor'); return; }
+        dataItems.push({addr:dptr, sz, vals, line:li}); dptr += sz*vals.length; return;
+      }
+      if(dir==='.byte'){ placeD(); const vals = splitArgs(rest); dataItems.push({addr:dptr, sz:1, vals, line:li}); dptr += vals.length; return; }
+      if(dir==='.space'){ placeD(); const n = parseNumber(rest); if(n===null||n<0){ err(li,'.space precisa de um número de bytes'); return; } dptr += n; return; }
+      if(dir==='.ascii'||dir==='.asciiz'){
+        placeD();
+        if(!/^"(?:[^"\\]|\\.)*"$/.test(rest)){ err(li, dir+' precisa de um texto entre aspas'); return; }
+        const str = unq(rest), bytes = Array.from(str).map(c => c.charCodeAt(0) & 255);
+        if(dir==='.asciiz') bytes.push(0);
+        dataItems.push({addr:dptr, sz:1, vals:bytes, raw:true, line:li}); dptr += bytes.length; return;
+      }
+      err(li, 'diretiva '+dir+' não é suportada'); return;
+    }
+    if(seg==='data'){ err(li, 'instrução dentro de .data: coloque .text antes do código'); return; }
+    pendT.forEach(k => { labels[k].seg = 'text'; labels[k].addr = TEXT_BASE + 4*text.length; labels[k].idx = text.length; }); pendT = [];
+    const sp = s.search(/\s/), op = (sp<0?s:s.slice(0,sp)).toLowerCase(), args = sp<0 ? [] : splitArgs(s.slice(sp));
+    text.push({op, args, line:li, src:raw});
+  });
+  pendT.forEach(k => { labels[k].seg = 'text'; labels[k].addr = TEXT_BASE + 4*text.length; labels[k].idx = text.length; });
+  placeD();
+  const mem = new Map();
+  const setByte = (a, b) => { const w = (a & ~3)>>>0, sh = (a & 3)*8; const old = mem.get(w)||0; mem.set(w, ((old & ~(255<<sh)) | ((b & 255)<<sh))|0); };
+  const valOf = (t, li) => { const n = parseNumber(t); if(n!==null) return n; const L = labels[String(t).toLowerCase()]; if(L) return L.addr; err(li, '"'+t+'" não é número nem label'); return 0; };
+  dataItems.forEach(it => {
+    it.vals.forEach((v,k) => {
+      const n = it.raw ? v : valOf(v, it.line);
+      for(let b=0;b<it.sz;b++) setByte(it.addr + k*it.sz + b, (n >>> (8*b)) & 255);
+    });
+  });
+  text.forEach((ins, idx) => { try{ ins.d = decodeIns(ins, labels, idx); }catch(e){ err(ins.line, String(e)); } });
+  const entry = labels.main && labels.main.seg==='text' ? labels.main.idx : 0;
+  const textLabelAt = {};
+  for(const k in labels){ const L = labels[k]; if(L.seg==='text') (textLabelAt[L.idx] = textLabelAt[L.idx] || []).push(L.name); }
+  return {lines, text, labels, labelAt, textLabelAt, mem, dataEnd: dptr, errors, entry};
+}
+function decodeIns(ins, labels, idx){
+  const {op, args} = ins;
+  const need = n => { if(args.length!==n) throw op+' precisa de '+n+' operando(s), achei '+args.length; };
+  const R = a => { const r = regIndex(a); if(r<0){ if(parseNumber(a)!==null) throw '"'+a+'" é uma constante, mas aqui precisa de registrador'; throw '"'+a+'" não é um registrador'; } return r; };
+  const I = (a, lo, hi) => { const v = parseNumber(a); if(v===null) throw '"'+a+'" não é um número'; if(lo!==undefined && (v<lo || v>hi)) throw 'a constante '+v+' não cabe em 16 bits ('+lo+' a '+hi+')'; return v; };
+  const L = a => { const k = String(a).toLowerCase(); const lab = labels[k]; if(!lab || lab.seg!=='text') throw 'o label "'+a+'" não existe no código (.text)'; return lab.idx; };
+  const ADDR = a => { const mm = String(a).match(/^([A-Za-z_][\w.\-]*)\s*([+-]\s*\d+)?$/); if(!mm) return null; const lab = labels[mm[1].toLowerCase()]; if(!lab) throw 'o label "'+mm[1]+'" não existe'; return lab.addr + (mm[2] ? parseInt(mm[2].replace(/\s/g,''),10) : 0); };
+  const isReg = a => regIndex(a) >= 0;
+  const warn = [];
+  if(EXAM_WARN[op]) warn.push('na prova "só soma e subtração" não pode usar '+op);
+  switch(op){
+    case 'add': case 'addu': case 'sub': case 'subu': case 'and': case 'or': case 'xor': case 'nor': case 'slt': case 'sltu': case 'mul':
+      need(3);
+      if(!isReg(args[2]) && parseNumber(args[2])!==null && op!=='mul' && op!=='nor'){
+        const map = {add:'addi',addu:'addiu',sub:'addi',subu:'addiu',and:'andi',or:'ori',xor:'xori',slt:'slti',sltu:'sltiu'};
+        let k = I(args[2]); if(op==='sub'||op==='subu') k = -k;
+        return {k:'I', iop:map[op], rt:R(args[0]), rs:R(args[1]), imm:k, pseudo:true, warn:[op+' com constante é pseudo-instrução (vira '+map[op]+'). Na prova escreva '+map[op]+'.']};
+      }
+      return {k:'R3', rd:R(args[0]), rs:R(args[1]), rt:R(args[2]), warn};
+    case 'sll': case 'srl': case 'sra': need(3); return {k:'SH', rd:R(args[0]), rt:R(args[1]), sh:I(args[2],0,31)};
+    case 'addi': case 'addiu': case 'slti': case 'sltiu': need(3); return {k:'I', iop:op, rt:R(args[0]), rs:R(args[1]), imm:I(args[2],-32768,32767)};
+    case 'andi': case 'ori': case 'xori': need(3); return {k:'I', iop:op, rt:R(args[0]), rs:R(args[1]), imm:I(args[2],0,65535)};
+    case 'lui': need(2); return {k:'LUI', rt:R(args[0]), imm:I(args[1],0,65535)};
+    case 'lw': case 'sw': case 'lb': case 'lbu': case 'sb': {
+      need(2); const rt = R(args[0]), a = args[1].trim();
+      let mm = a.match(/^(.*?)\(\s*(\$\w+)\s*\)$/);
+      if(mm){ const offT = mm[1].trim(); let off = 0, pseudo = false;
+        if(offT){ const n = parseNumber(offT); if(n!==null) off = n; else { const v = ADDR(offT); if(v===null) throw 'deslocamento "'+offT+'" inválido'; off = v; pseudo = true; } }
+        if(!pseudo && (off<-32768 || off>32767)) throw 'deslocamento '+off+' não cabe em 16 bits';
+        return {k:'M', rt, base:R(mm[2]), off, pseudo}; }
+      const n = parseNumber(a); if(n!==null) return {k:'M', rt, base:-1, off:n, pseudo:true};
+      const v = ADDR(a); if(v===null) throw '"'+a+'" deveria ser deslocamento(registrador), ex.: 8($s3), ou um label do .data';
+      return {k:'M', rt, base:-1, off:v, pseudo:true};
+    }
+    case 'beq': case 'bne': {
+      need(3); const rs = R(args[0]);
+      if(isReg(args[1])) return {k:'B', bop:op, rs, rt:R(args[1]), target:L(args[2])};
+      return {k:'B', bop:op, rs, imm:I(args[1]), target:L(args[2]), pseudo:true, warn:['comparar com constante é pseudo-instrução: na prova ponha o número num registrador antes']};
+    }
+    case 'beqz': case 'bnez': need(2); return {k:'B', bop:op==='beqz'?'beq':'bne', rs:R(args[0]), rt:0, target:L(args[1]), pseudo:true};
+    case 'blt': case 'bgt': case 'ble': case 'bge': {
+      need(3); const rs = R(args[0]); const o = {k:'BC', bop:op, rs, target:L(args[2]), pseudo:true, warn:[op+' é pseudo-instrução: na prova use slt + bne/beq']};
+      if(isReg(args[1])) o.rt = R(args[1]); else o.imm = I(args[1]);
+      return o;
+    }
+    case 'b': need(1); return {k:'J', jop:'j', target:L(args[0]), pseudo:true};
+    case 'j': case 'jal': need(1); return {k:'J', jop:op, target:L(args[0])};
+    case 'jr': need(1); return {k:'JR', rs:R(args[0])};
+    case 'jalr': need(1); return {k:'JALR', rs:R(args[0])};
+    case 'mult': case 'multu': need(2); return {k:'MD', mop:op, rs:R(args[0]), rt:R(args[1]), warn};
+    case 'div': case 'divu':
+      if(args.length===3) return {k:'DIV3', mop:op, rd:R(args[0]), rs:R(args[1]), rt:R(args[2]), pseudo:true, warn};
+      need(2); return {k:'MD', mop:op, rs:R(args[0]), rt:R(args[1]), warn};
+    case 'mfhi': case 'mflo': need(1); return {k:'MF', mop:op, rd:R(args[0])};
+    case 'move': need(2); return {k:'MOVE', rd:R(args[0]), rs:R(args[1]), pseudo:true};
+    case 'li': need(2); return {k:'LI', rd:R(args[0]), imm:I(args[1]), pseudo:true};
+    case 'la': { need(2); const v = ADDR(args[1]); if(v===null) throw 'la precisa de um label, ex.: la $a0, msg'; return {k:'LI', rd:R(args[0]), imm:v, pseudo:true, la:args[1]}; }
+    case 'nop': need(0); return {k:'NOP'};
+    case 'syscall': need(0); return {k:'SYS'};
+    default: throw 'não conheço a instrução "'+op+'"';
+  }
+}
+function encodeIns(ins, idx){
+  const d = ins.d; if(!d || d.pseudo) return null;
+  const R = (op,rs,rt,rd,sh,fn) => (((op<<26)|(rs<<21)|(rt<<16)|(rd<<11)|(sh<<6)|fn)>>>0);
+  const I = (op,rs,rt,im) => (((op<<26)|(rs<<21)|(rt<<16)|(im & 0xFFFF))>>>0);
+  const F = {add:32,addu:33,sub:34,subu:35,and:36,or:37,xor:38,nor:39,slt:42,sltu:43};
+  const IO = {addi:8,addiu:9,slti:10,sltiu:11,andi:12,ori:13,xori:14};
+  switch(d.k){
+    case 'R3': return ins.op==='mul' ? R(28,d.rs,d.rt,d.rd,0,2) : R(0,d.rs,d.rt,d.rd,0,F[ins.op]);
+    case 'SH': return R(0,0,d.rt,d.rd,d.sh,{sll:0,srl:2,sra:3}[ins.op]);
+    case 'I': return I(IO[d.iop],d.rs,d.rt,d.imm);
+    case 'LUI': return I(15,0,d.rt,d.imm);
+    case 'M': return I({lw:35,lb:32,lbu:36,sw:43,sb:40}[ins.op],d.base,d.rt,d.off);
+    case 'B': return I(d.bop==='beq'?4:5,d.rs,d.rt,d.target-(idx+1));
+    case 'J': return ((((d.jop==='j'?2:3)<<26) | (((TEXT_BASE+4*d.target)>>>2) & 0x3FFFFFF))>>>0);
+    case 'JR': return R(0,d.rs,0,0,0,8);
+    case 'JALR': return R(0,d.rs,0,31,0,9);
+    case 'MD': return R(0,d.rs,d.rt,0,0,{mult:24,multu:25,div:26,divu:27}[d.mop]);
+    case 'MF': return R(0,0,0,d.rd,0,d.mop==='mfhi'?16:18);
+    case 'SYS': return 12;
+    case 'NOP': return 0;
+  }
+  return null;
+}
+
+(function(){
+  const ta = $('#lab-code'); if(!ta) return;
+  const hl = $('#lab-hl'), gut = $('#lab-gutter');
   const PRESETS = [
-    {n:'Multiplicação 6 × 4', code:()=>$('#code-mult').textContent, inp:'$s0=6, $s1=4', watch:['v0']},
-    {n:'Potência 3 ^ 4', code:()=>$('#code-pot').textContent, inp:'$s0=3, $s1=4', watch:['v0']},
-    {n:'Raiz por ímpares (30)', code:()=>$('#code-raiz1').textContent, inp:'$s0=30', watch:['v0','t2']},
-    {n:'Raiz por tentativa (50)', code:()=>$('#code-raiz2').textContent, inp:'$s0=50', watch:['v0']},
-    {n:'Potência como procedimento (jal/jr)', code:()=>$('#code-potproc').textContent, inp:'', watch:['s0']},
-    {n:'Fatorial recursivo só com somas (pilha)', code:()=>[
-'# Fatorial recursivo (slide 58) com a multiplicação trocada por somas',
-'main:   addi $a0, $zero, 5       # n = 5',
-'        jal  fact                # $v0 = fact(5)',
-'        add  $s0, $v0, $zero     # $s0 = 120',
-'        j    fim',
+    {n:'Bem-vindo: soma de um vetor (.data + syscall)', code:()=>[
+'# Bem-vindo ao laboratório! Este programa soma um vetor que está',
+'# na memória (.data) e mostra o resultado no console.',
+'        .data',
+'A:      .word 5, 8, 2, 9, 6      # o vetor: cada número ocupa 4 bytes',
+'n:      .word 5                  # quantidade de elementos',
+'msg:    .asciiz "Soma = "',
+'',
+'        .text',
+'main:   la   $s3, A              # $s3 = endereço base do vetor',
+'        lw   $s2, n              # $s2 = 5',
+'        add  $s1, $zero, $zero   # soma = 0',
+'        add  $s0, $zero, $zero   # i = 0',
+'Loop:   slt  $t0, $s0, $s2       # i < n ?',
+'        beq  $t0, $zero, Fim',
+'        add  $t1, $s0, $s0       # 2i',
+'        add  $t1, $t1, $t1       # 4i  (anda de 4 em 4 bytes)',
+'        add  $t1, $t1, $s3       # endereço de A[i] = base + 4i',
+'        lw   $t0, 0($t1)         # $t0 = A[i]',
+'        add  $s1, $s1, $t0       # soma = soma + A[i]',
+'        addi $s0, $s0, 1         # i++',
+'        j    Loop',
+'Fim:    li   $v0, 4              # syscall 4: imprime texto',
+'        la   $a0, msg',
+'        syscall',
+'        li   $v0, 1              # syscall 1: imprime inteiro',
+'        move $a0, $s1',
+'        syscall',
+'        li   $v0, 10             # syscall 10: encerra',
+'        syscall'].join('\n')},
+    {n:'Multiplicação 6 × 4 (só somas)', code:()=>$('#code-mult').textContent, init:'$s0=6, $s1=4'},
+    {n:'Potência 3 ^ 4 (só somas)', code:()=>$('#code-pot').textContent, init:'$s0=3, $s1=4'},
+    {n:'Potência como procedimento (jal / jr)', code:()=>$('#code-potproc').textContent},
+    {n:'Raiz quadrada por ímpares (30)', code:()=>$('#code-raiz1').textContent, init:'$s0=30'},
+    {n:'Raiz quadrada por tentativa (50)', code:()=>$('#code-raiz2').textContent, init:'$s0=50'},
+    {n:'Lê base e expoente do teclado e imprime a potência', kbd:'2 10', code:()=>[
+'# Digite os números no campo "Teclado" (ex.: 2 10) e execute.',
+'main:   li   $v0, 5              # syscall 5: lê um inteiro',
+'        syscall',
+'        move $s0, $v0            # base',
+'        li   $v0, 5',
+'        syscall',
+'        move $s1, $v0            # expoente',
+'        addi $s2, $zero, 1       # resultado = 1',
+'        add  $t0, $zero, $zero   # i = 0',
+'ext:    beq  $t0, $s1, mostra',
+'        add  $t1, $zero, $zero   # acumulador = 0',
+'        add  $t2, $zero, $zero   # j = 0',
+'int:    beq  $t2, $s0, fim_mult',
+'        add  $t1, $t1, $s2       # acumulador += resultado',
+'        addi $t2, $t2, 1',
+'        j    int',
+'fim_mult: add $s2, $t1, $zero    # resultado = resultado × base',
+'        addi $t0, $t0, 1',
+'        j    ext',
+'mostra: li   $v0, 1              # imprime o resultado',
+'        move $a0, $s2',
+'        syscall',
+'        li   $v0, 10',
+'        syscall'].join('\n')},
+    {n:'Fatorial recursivo: veja a pilha crescer', code:()=>[
+'# Fatorial recursivo (slide 58) com a multiplicação trocada por somas.',
+'# Ande com "Passo" e observe a PILHA: cada chamada guarda $ra e $a0.',
+'main:   addi $a0, $zero, 4       # n = 4',
+'        jal  fact                # $v0 = fact(4)',
+'        move $a0, $v0',
+'        li   $v0, 1              # imprime 24',
+'        syscall',
+'        li   $v0, 10',
+'        syscall',
 '',
 'fact:   addi $sp, $sp, -8        # abre 2 vagas na pilha',
 '        sw   $ra, 4($sp)         # salva o endereço de volta',
@@ -2539,39 +3474,50 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
 '        lw   $a0, 0($sp)         # recupera n',
 '        lw   $ra, 4($sp)         # recupera $ra',
 '        addi $sp, $sp, 8         # fecha a pilha',
-'        add  $t1, $zero, $zero   # $v0 = n × $v0, só com somas',
+'        add  $t1, $zero, $zero   # $v0 = n × $v0 só com somas',
 '        add  $t2, $zero, $zero',
 'Lm:     beq  $t2, $a0, Lm_fim',
 '        add  $t1, $t1, $v0',
 '        addi $t2, $t2, 1',
 '        j    Lm',
 'Lm_fim: add  $v0, $t1, $zero',
-'        jr   $ra',
-'fim:'].join('\n'), inp:'', watch:['s0']},
-    {n:'if / else do slide 23', code:()=>[
-'# if (i == j) f = g + h; else f = g - h;',
-'# f=$s0  g=$s1  h=$s2  i=$s3  j=$s4',
-'        bne $s3, $s4, Else   # i != j ? vai para o else',
-'        add $s0, $s1, $s2    # f = g + h',
-'        j   Exit',
-'Else:   sub $s0, $s1, $s2    # f = g - h',
-'Exit:'].join('\n'), inp:'$s1=10, $s2=3, $s3=5, $s4=5', watch:['s0']},
-    {n:'Soma de um vetor com lw', code:()=>[
-'# soma = A[0] + A[1] + ... + A[n-1]',
-'# $s3 = endereço base de A, $s2 = n, resultado em $s1',
-'        add  $s1, $zero, $zero   # soma = 0',
-'        add  $s0, $zero, $zero   # i = 0',
-'Loop:   slt  $t0, $s0, $s2       # i < n ?',
-'        beq  $t0, $zero, Exit    # não: sai',
-'        add  $t1, $s0, $s0       # 2i',
-'        add  $t1, $t1, $t1       # 4i',
-'        add  $t1, $t1, $s3       # endereço de A[i]',
-'        lw   $t0, 0($t1)         # $t0 = A[i]',
-'        add  $s1, $s1, $t0       # soma = soma + A[i]',
-'        addi $s0, $s0, 1         # i++',
-'        j    Loop',
-'Exit:'].join('\n'), inp:'$s3=0x10010000, $s2=5', mem:'0x10010000: 5 8 2 9 6', watch:['s1']},
-    {n:'Exercício 1 dos slides (pares, ímpares, maior)', code:()=>[
+'        jr   $ra'].join('\n')},
+    {n:'leaf_example do slide 32 (salva e restaura na pilha)', code:()=>[
+'# main chama leaf_example(10, 4, 3, 2) = (10+4) - (3+2) = 9',
+'main:   addi $a0, $zero, 10      # g',
+'        addi $a1, $zero, 4       # h',
+'        addi $a2, $zero, 3       # i',
+'        addi $a3, $zero, 2       # j',
+'        addi $s0, $zero, 99      # valor que NÃO pode ser perdido',
+'        jal  leaf_example',
+'        move $a0, $v0',
+'        li   $v0, 1              # imprime 9 (e $s0 continua 99)',
+'        syscall',
+'        li   $v0, 10',
+'        syscall',
+'',
+'leaf_example:',
+'        addi $sp, $sp, -12       # abre 3 vagas',
+'        sw   $t1, 8($sp)',
+'        sw   $t0, 4($sp)',
+'        sw   $s0, 0($sp)         # $s0 é preservado: tem que salvar',
+'        add  $t0, $a0, $a1       # g + h',
+'        add  $t1, $a2, $a3       # i + j',
+'        sub  $s0, $t0, $t1       # f',
+'        add  $v0, $s0, $zero     # return f',
+'        lw   $s0, 0($sp)         # devolve $s0 = 99',
+'        lw   $t0, 4($sp)',
+'        lw   $t1, 8($sp)',
+'        addi $sp, $sp, 12        # fecha as 3 vagas',
+'        jr   $ra'].join('\n')},
+    {n:'Exercício 1 dos slides: pares, ímpares e maior', code:()=>[
+'        .data',
+'A:      .word 7, 12, 3, 20, 9, 4',
+'        .text',
+'main:   la   $a0, A              # endereço base',
+'        addi $a1, $zero, 6       # 6 elementos',
+'        jal  Proc1',
+'        j    Fim                 # resultado: $v0 pares, $v1 ímpares, $s7 maior',
 'Proc1:    add  $a1, $a1, $a1',
 '          add  $a1, $a1, $a1     # tamanho em bytes',
 '          addi $t0, $zero, 0',
@@ -2600,7 +3546,33 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
 '          bne  $t1, $zero, Next1',
 '          add  $s7, $s4, $zero   # novo maior',
 'Next1:    j    Seguinte',
-'Exit:     jr   $ra'].join('\n'), inp:'$a0=0x10010000, $a1=6', mem:'0x10010000: 7 12 3 20 9 4', watch:['v0','v1','s7']},
+'Exit:     jr   $ra',
+'Fim:'].join('\n')},
+    {n:'strcpy do slide 57 (bytes com lb / sb)', code:()=>[
+'        .data',
+'y:      .asciiz "MIPS"           # origem: 5 bytes (M I P S 0)',
+'x:      .space 8                 # destino: 8 bytes vazios',
+'        .text',
+'main:   la   $a0, x',
+'        la   $a1, y',
+'        jal  strcpy',
+'        li   $v0, 4              # imprime a cópia',
+'        la   $a0, x',
+'        syscall',
+'        li   $v0, 10',
+'        syscall',
+'strcpy: addi $sp, $sp, -4',
+'        sw   $s0, 0($sp)',
+'        add  $s0, $zero, $zero   # i = 0',
+'L1:     add  $t1, $a1, $s0       # endereço de y[i] (1 byte por char)',
+'        lb   $t2, 0($t1)',
+'        add  $t3, $a0, $s0       # endereço de x[i]',
+'        sb   $t2, 0($t3)',
+'        addi $s0, $s0, 1',
+'        bne  $t2, $zero, L1',
+'        lw   $s0, 0($sp)',
+'        addi $sp, $sp, 4',
+'        jr   $ra'].join('\n')},
     {n:'Divisão por subtrações (17 ÷ 5)', code:()=>[
 '# $v0 = $s0 / $s1 (quociente)   $v1 = resto',
 '        add  $v0, $zero, $zero   # quociente = 0',
@@ -2610,240 +3582,300 @@ function codeLbl(t){ return '<code>'+hlLine(t)+'</code>'; }
 '        sub  $v1, $v1, $s1       # resto = resto - b',
 '        addi $v0, $v0, 1         # quociente++',
 '        j    Div',
-'Fim:'].join('\n'), inp:'$s0=17, $s1=5', watch:['v0','v1']},
-    {n:'Raiz cúbica por tentativa (30)', code:()=>[
-'# $v0 = maior i com i*i*i <= $s0',
-'        addi $t0, $zero, 1       # i = 1',
-'Tenta:  add  $t1, $zero, $zero   # quadrado = i × i',
-'        add  $t2, $zero, $zero',
-'Q:      beq  $t2, $t0, Cubo',
-'        add  $t1, $t1, $t0',
-'        addi $t2, $t2, 1',
-'        j    Q',
-'Cubo:   add  $t3, $zero, $zero   # cubo = quadrado × i',
-'        add  $t2, $zero, $zero',
-'C:      beq  $t2, $t0, Testa',
-'        add  $t3, $t3, $t1',
-'        addi $t2, $t2, 1',
-'        j    C',
-'Testa:  slt  $t4, $s0, $t3       # n < i³ ?',
-'        bne  $t4, $zero, Achou',
-'        addi $t0, $t0, 1',
-'        j    Tenta',
-'Achou:  addi $v0, $t0, -1'].join('\n'), inp:'$s0=30', watch:['v0']}
+'Fim:'].join('\n'), init:'$s0=17, $s1=5'},
+    {n:'Seu código (em branco)', code:()=>[
+'        .data',
+'# coloque seus dados aqui, ex.:  vetor: .word 1, 2, 3',
+'',
+'        .text',
+'main:   ',
+''].join('\n')}
   ];
-  const sel = $('#sim-preset'), ta = $('#sim-code'), inEl = $('#sim-in'), memEl = $('#sim-mem');
+  const sel = $('#lab-preset');
   sel.innerHTML = PRESETS.map((p,i) => '<option value="'+i+'">'+esc(p.n)+'</option>').join('');
-  let S = null, playing = null, watch = ['v0'];
+  let prog = null, M = null, dirty = true, bps = new Set(), fmt = 'd', playing = null, lineEls = [], gutEls = [];
 
-  function parseNum(s){
-    s = String(s).trim();
-    if(/^-?0x[0-9a-f]+$/i.test(s)){ const neg = s[0]==='-'; const v = parseInt(s.replace('-',''),16); return (neg?-v:v)|0; }
-    if(/^-?\d+$/.test(s)) return parseInt(s,10);
-    return null;
+  /* ---------- editor ---------- */
+  function renderEditor(){
+    const lines = ta.value.split('\n');
+    hl.innerHTML = lines.map((l,i) => '<span class="l" data-l="'+i+'">'+(hlLine(l)||' ')+'</span>').join('');
+    gut.innerHTML = lines.map((l,i) => '<div data-l="'+i+'">'+(i+1)+'</div>').join('');
+    lineEls = Array.from(hl.children); gutEls = Array.from(gut.children);
+    syncScroll(); markLines();
   }
-  function parseProgram(text){
-    const lines = text.split(/\r?\n/), prog = [], labels = {}, lname = {}, errors = [];
-    lines.forEach((raw, li) => {
-      let s = raw; const ci = commentIndex(s); if(ci>=0) s = s.slice(0,ci);
-      s = s.trim(); let m;
-      while((m = s.match(/^([A-Za-z_][\w.\-]*)\s*:\s*/))){
-        const k = m[1].toLowerCase();
-        if(labels[k]!==undefined) errors.push({line:li, msg:'o label "'+m[1]+'" aparece duas vezes'});
-        labels[k] = prog.length; lname[prog.length] = lname[prog.length] || m[1];
-        s = s.slice(m[0].length);
-      }
-      if(!s || s[0]==='.') return;
-      const sp = s.search(/\s/);
-      const op = (sp<0?s:s.slice(0,sp)).toLowerCase();
-      const args = sp<0 ? [] : s.slice(sp).split(',').map(a=>a.trim()).filter(a=>a.length);
-      prog.push({op, args, line:li, src:raw});
-    });
-    prog.forEach(ins => { try{ ins.d = decode(ins, labels); }catch(e){ errors.push({line:ins.line, msg:String(e)}); } });
-    return {prog, labels, lname, errors, lines};
+  function syncScroll(){ hl.scrollTop = ta.scrollTop; hl.scrollLeft = ta.scrollLeft; gut.scrollTop = ta.scrollTop; }
+  ta.addEventListener('scroll', syncScroll);
+  ta.addEventListener('input', () => { dirty = true; stop(); renderEditor(); status(); });
+  ta.addEventListener('keydown', e => {
+    if(e.key==='Tab' && !e.shiftKey){ e.preventDefault(); const s = ta.selectionStart, en = ta.selectionEnd; ta.value = ta.value.slice(0,s)+'\t'+ta.value.slice(en); ta.selectionStart = ta.selectionEnd = s+1; ta.dispatchEvent(new Event('input')); }
+    if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); doStep(); }
+  });
+  gut.addEventListener('click', e => { const d = e.target.closest('div[data-l]'); if(!d) return; const l = +d.dataset.l; bps.has(l) ? bps.delete(l) : bps.add(l); markLines(); });
+  function curLine(){ return (!dirty && M && !M.done && prog && M.pc < prog.text.length) ? prog.text[M.pc].line : -1; }
+  function markLines(){
+    const cl = curLine(), errs = new Set(prog && dirty===false ? prog.errors.map(e=>e.line) : []);
+    lineEls.forEach((el,i) => { el.classList.toggle('cur', i===cl); el.classList.toggle('err', errs.has(i)); el.classList.toggle('bpl', bps.has(i)); });
+    gutEls.forEach((el,i) => { el.classList.toggle('cur', i===cl); el.classList.toggle('bp', bps.has(i)); });
+    if(cl>=0){ const top = cl*20+8, vh = ta.clientHeight; if(top < ta.scrollTop+10 || top > ta.scrollTop+vh-50){ ta.scrollTop = Math.max(0, top - vh/2); syncScroll(); } }
   }
-  function decode(ins, labels){
-    const {op, args} = ins;
-    const need = n => { if(args.length!==n) throw op+' precisa de '+n+' operando(s), achei '+args.length; };
-    const R = a => { const r = regIndex(a); if(r<0){ if(parseNum(a)!==null) throw '"'+a+'" é uma constante: '+op+' só aceita registradores. Com constante use addi'; throw '"'+a+'" não é um registrador'; } return r; };
-    const I = (a,lo,hi) => { const v = parseNum(a); if(v===null) throw '"'+a+'" não é um número'; if(lo!==undefined && (v<lo||v>hi)) throw 'a constante '+v+' não cabe em 16 bits ('+lo+' a '+hi+')'; return v; };
-    const L = a => { const k = String(a).toLowerCase(); if(labels[k]===undefined) throw 'o label "'+a+'" não existe'; return labels[k]; };
-    const M = a => { const m = String(a).match(/^(-?(?:0x[0-9a-f]+|\d+))?\s*\(\s*(\$\w+)\s*\)$/i); if(!m) throw '"'+a+'" deveria ser deslocamento(registrador), ex.: 8($s3)'; return {off: m[1]?parseNum(m[1]):0, base: R(m[2])}; };
-    switch(op){
-      case 'add': case 'addu': case 'sub': case 'subu': case 'and': case 'or': case 'nor': case 'slt': case 'sltu':
-        need(3); return {k:'R', rd:R(args[0]), rs:R(args[1]), rt:R(args[2])};
-      case 'addi': case 'addiu': case 'slti': need(3); return {k:'I', rt:R(args[0]), rs:R(args[1]), imm:I(args[2],-32768,32767)};
-      case 'andi': case 'ori': need(3); return {k:'I', rt:R(args[0]), rs:R(args[1]), imm:I(args[2],0,65535)};
-      case 'lui': need(2); return {k:'LUI', rt:R(args[0]), imm:I(args[1],0,65535)};
-      case 'lw': case 'sw': case 'lb': case 'sb': need(2); return Object.assign({k:'M', rt:R(args[0])}, M(args[1]));
-      case 'beq': case 'bne': need(3); return {k:'B', rs:R(args[0]), rt:R(args[1]), target:L(args[2])};
-      case 'j': case 'jal': need(1); return {k:'J', target:L(args[0])};
-      case 'jr': need(1); return {k:'JR', rs:R(args[0])};
-      case 'move': need(2); return {k:'MOVE', rd:R(args[0]), rs:R(args[1])};
-      case 'li': need(2); return {k:'LI', rd:R(args[0]), imm:I(args[1])};
-      case 'nop': need(0); return {k:'NOP'};
-      case 'syscall': return {k:'END'};
-      case 'mult': case 'multu': case 'mul': case 'div': case 'divu':
-        throw op+' não vale aqui: a prova é só com soma e subtração. Troque por um laço de somas (seção 3.2)';
-      case 'blt': case 'bgt': case 'ble': case 'bge':
-        throw op+' não está nos slides. Use slt + beq/bne (tabela da seção 1.5)';
-      default: throw 'não conheço a instrução "'+op+'"';
-    }
-  }
-  function parseInputs(str){
+
+  /* ---------- máquina ---------- */
+  function parseInit(str){
     const regs = {};
     str.split(/[,;]/).map(x=>x.trim()).filter(Boolean).forEach(p => {
-      const m = p.match(/^(\$\w+)\s*=\s*(\S+)$/); if(!m) throw 'entrada "'+p+'" deveria ser como $s0=3';
+      const m = p.match(/^(\$\w+)\s*=\s*(\S+)$/); if(!m) throw 'valor inicial "'+p+'" deveria ser como $s0=3';
       const r = regIndex(m[1]); if(r<0) throw '"'+m[1]+'" não é registrador';
-      const v = parseNum(m[2]); if(v===null) throw '"'+m[2]+'" não é número';
-      regs[r] = v;
+      const v = parseNumber(m[2]); if(v===null) throw '"'+m[2]+'" não é número';
+      regs[r] = v|0;
     });
     return regs;
   }
-  function parseMem(str){
-    const mem = new Map();
-    str.split(';').map(x=>x.trim()).filter(Boolean).forEach(g => {
-      const m = g.match(/^(\S+)\s*:\s*(.*)$/); if(!m) throw 'memória "'+g+'" deveria ser como 0x10010000: 5 8 2';
-      let a = parseNum(m[1]); if(a===null || (a&3)) throw 'endereço inicial da memória tem que ser número múltiplo de 4';
-      m[2].split(/\s+/).filter(Boolean).forEach(v => { const n = parseNum(v); if(n===null) throw '"'+v+'" não é número'; mem.set(a>>>0, n|0); a += 4; });
-    });
-    return mem;
-  }
-  function reset(){
+  function assembleAndReset(){
     stop();
-    const P = parseProgram(ta.value);
-    const regs = new Int32Array(32);
-    regs[29] = 0x7FFFFFFC; regs[28] = 0x10008000;
-    let msg = '', mem = new Map();
-    try{ const inR = parseInputs(inEl.value); for(const r in inR){ if(+r!==0) regs[r] = inR[r]; } }catch(e){ msg = String(e); }
-    try{ mem = parseMem(memEl.value); }catch(e){ msg = msg || String(e); }
-    const used = new Set([0]);
-    P.prog.forEach(ins => ins.args.forEach(a => (a.match(/\$\w+/g)||[]).forEach(t => { const r = regIndex(t); if(r>=0) used.add(r); })));
-    S = {P, regs, mem, pc:0, steps:0, done:false, err:null, used, log:[], last:null, changed:[], memChanged:null};
-    if(P.errors.length){ S.err = P.errors.map(e => 'Linha '+(e.line+1)+': '+e.msg).join('<br>'); S.errLine = P.errors[0].line; S.done = true; }
-    else if(msg){ S.err = esc(msg); S.done = true; }
-    else if(!P.prog.length){ S.err = 'Não há instruções para executar.'; S.done = true; }
-    buildView(); render();
+    prog = assemble(ta.value); dirty = false;
+    const regs = new Int32Array(32); regs[29] = SP_INIT; regs[28] = GP_INIT;
+    M = {regs, hi:0, lo:0, mem:new Map(prog.mem), meta:new Map(), pc:prog.entry, steps:0, done:false, err:null, endMsg:null, out:'', kbd:[], kbdPos:0, log:[], hist:[], changed:[], memChanged:null, warned:new Set()};
+    try{ const ini = parseInit($('#lab-init').value); for(const r in ini) if(+r!==0) regs[r] = ini[r]; }catch(e){ M.err = esc(e); M.done = true; }
+    const kb = $('#lab-kbd').value.trim();
+    if(kb){ kb.split(/[\s,;]+/).forEach(t => { const v = parseNumber(t); if(v===null){ M.err = M.err || 'Teclado: "'+esc(t)+'" não é número.'; M.done = true; } else M.kbd.push(v|0); }); }
+    if(prog.errors.length){ M.done = true; M.err = '<b>Erro de montagem</b> (corrija e clique em Montar):<br>'+prog.errors.map(e => 'Linha '+(e.line+1)+': '+esc(e.msg)).join('<br>'); }
+    else if(!prog.text.length && !M.err){ M.done = true; M.err = 'Não há instruções no .text para executar.'; }
+    render();
   }
-  function buildView(){
-    view.innerHTML = S.P.lines.map((l,i) => '<span class="ln" data-l="'+i+'"><span class="no">'+(i+1)+'</span>'+(hlLine(l)||' ')+'</span>').join('');
-  }
-  function finish(text){ S.done = true; S.endMsg = text; }
-  function fail(text){ S.done = true; S.err = text; }
-  function memRead(a){ return S.mem.get((a & ~3)>>>0) || 0; }
-  function memWrite(a, v){ S.mem.set((a & ~3)>>>0, v|0); }
+  function ensure(){ if(dirty || !M) assembleAndReset(); }
   const nm = i => '$'+REGN[i];
-  function labelAt(idx){ return S.P.lname[idx] || (idx>=S.P.prog.length ? 'o fim do programa' : 'linha '+(S.P.prog[idx].line+1)); }
-  function step(){
-    if(S.done) return;
-    if(S.pc >= S.P.prog.length){ finish('Fim do programa: não há mais instruções.'); return; }
-    const ins = S.P.prog[S.pc], d = ins.d, r = S.regs, op = ins.op;
-    let next = S.pc+1, say = '';
+  const lblAt = idx => (prog.textLabelAt[idx] && prog.textLabelAt[idx][0]) || (idx>=prog.text.length ? 'o fim do programa' : 'linha '+(prog.text[idx].line+1));
+  function stepOnce(){
+    if(M.done) return false;
+    if(M.pc >= prog.text.length){ const rec0 = mkRec(); M.done = true; M.endMsg = 'Fim: acabaram as instruções.'; M.hist.push(rec0); return false; }
+    const ins = prog.text[M.pc], d = ins.d, r = M.regs, op = ins.op;
+    const rec = mkRec();
+    let next = M.pc+1, say = '';
     const changed = [];
-    const set = (i,v) => { if(i===0){ say += ' (mas $zero continua 0)'; return; } r[i] = v|0; changed.push(i); };
+    M.memChanged = null;
+    const setR = (i,v) => { if(i===0){ say += ' (mas $zero continua 0)'; return; } rec.regs.push([i, r[i]]); r[i] = v|0; changed.push(i); };
     const ovf = v => v > 2147483647 || v < -2147483648;
+    const rdW = a => M.mem.get((a & ~3)>>>0) || 0;
+    const wrW = (a, v, who) => { const k = (a & ~3)>>>0; rec.mem.push([k, M.mem.has(k) ? M.mem.get(k) : undefined, M.meta.get(k)]); M.mem.set(k, v|0); M.meta.set(k, who); M.memChanged = k; };
+    const fail = t => { M.done = true; M.err = t; M.hist.push(rec); };
     switch(d.k){
-      case 'R': {
+      case 'R3': {
         const a = r[d.rs], b = r[d.rt]; let v;
-        if(op==='add'||op==='addu'){ v = a+b; if(op==='add' && ovf(v)) return fail('Overflow aritmético em "'+ins.src.trim()+'": '+a+' + '+b+' não cabe em 32 bits. No MIPS isso gera uma exceção.'); v|=0; say = nm(d.rd)+' = '+nm(d.rs)+' + '+nm(d.rt)+' = '+a+' + '+b+' = '+v; }
-        else if(op==='sub'||op==='subu'){ v = a-b; if(op==='sub' && ovf(v)) return fail('Overflow aritmético em "'+ins.src.trim()+'".'); v|=0; say = nm(d.rd)+' = '+nm(d.rs)+' − '+nm(d.rt)+' = '+a+' − '+b+' = '+v; }
+        if(op==='add'||op==='addu'){ v = a+b; if(op==='add' && ovf(v)) return fail('Overflow aritmético na linha '+(ins.line+1)+': '+a+' + '+b+' não cabe em 32 bits. No MIPS isso gera uma exceção (o PC iria para o tratador e o EPC guardaria o endereço).'); say = nm(d.rd)+' = '+nm(d.rs)+' + '+nm(d.rt)+' = '+a+' + '+b+' = '+(v|0); }
+        else if(op==='sub'||op==='subu'){ v = a-b; if(op==='sub' && ovf(v)) return fail('Overflow aritmético na linha '+(ins.line+1)+'.'); say = nm(d.rd)+' = '+nm(d.rs)+' − '+nm(d.rt)+' = '+a+' − '+b+' = '+(v|0); }
         else if(op==='and'){ v = a&b; say = nm(d.rd)+' = '+a+' AND '+b+' = '+v; }
         else if(op==='or'){ v = a|b; say = nm(d.rd)+' = '+a+' OR '+b+' = '+v; }
+        else if(op==='xor'){ v = a^b; say = nm(d.rd)+' = '+a+' XOR '+b+' = '+v; }
         else if(op==='nor'){ v = ~(a|b); say = nm(d.rd)+' = NOR = '+v; }
         else if(op==='slt'){ v = a<b?1:0; say = nm(d.rd)+' = ('+nm(d.rs)+' < '+nm(d.rt)+')? → '+a+' < '+b+'? '+(v?'sim → 1':'não → 0'); }
-        else { v = (a>>>0)<(b>>>0)?1:0; say = nm(d.rd)+' = '+v; }
-        set(d.rd, v); break; }
+        else if(op==='sltu'){ v = (a>>>0)<(b>>>0)?1:0; say = nm(d.rd)+' = '+v; }
+        else { v = Math.imul(a,b); say = nm(d.rd)+' = '+a+' × '+b+' = '+v; }
+        setR(d.rd, v); break; }
+      case 'SH': { const a = r[d.rt]; const v = op==='sll' ? a<<d.sh : op==='srl' ? a>>>d.sh : a>>d.sh; say = nm(d.rd)+' = '+nm(d.rt)+' '+(op==='sll'?'<<':'>>')+' '+d.sh+' = '+(v|0)+(op==='sll'?' (× '+(2**d.sh)+')':''); setR(d.rd, v); break; }
       case 'I': {
-        const a = r[d.rs]; let v;
-        if(op==='addi'||op==='addiu'){ v = a+d.imm; if(op==='addi' && ovf(v)) return fail('Overflow aritmético em "'+ins.src.trim()+'".'); v|=0; say = nm(d.rt)+' = '+nm(d.rs)+' + '+d.imm+' = '+a+' + '+d.imm+' = '+v; }
-        else if(op==='slti'){ v = a<d.imm?1:0; say = nm(d.rt)+' = ('+nm(d.rs)+' < '+d.imm+')? → '+a+' < '+d.imm+'? '+(v?'sim → 1':'não → 0'); }
-        else if(op==='andi'){ v = a & d.imm; say = nm(d.rt)+' = '+a+' AND '+d.imm+' = '+v; }
-        else { v = a | d.imm; say = nm(d.rt)+' = '+a+' OR '+d.imm+' = '+v; }
-        set(d.rt, v); break; }
-      case 'LUI': { const v = (d.imm<<16)|0; say = nm(d.rt)+' = '+d.imm+' nos 16 bits de cima = '+hex(v); set(d.rt, v); break; }
+        const a = r[d.rs], k = d.imm, o = d.iop; let v;
+        if(o==='addi'||o==='addiu'){ v = a+k; if(o==='addi' && ovf(v)) return fail('Overflow aritmético na linha '+(ins.line+1)+'.'); say = nm(d.rt)+' = '+nm(d.rs)+' + '+k+' = '+a+' + '+k+' = '+(v|0); }
+        else if(o==='slti'){ v = a<k?1:0; say = nm(d.rt)+' = ('+nm(d.rs)+' < '+k+')? → '+a+' < '+k+'? '+(v?'sim → 1':'não → 0'); }
+        else if(o==='sltiu'){ v = (a>>>0)<(k>>>0)?1:0; say = nm(d.rt)+' = '+v; }
+        else if(o==='andi'){ v = a & k; say = nm(d.rt)+' = '+a+' AND '+k+' = '+v; }
+        else if(o==='ori'){ v = a | k; say = nm(d.rt)+' = '+a+' OR '+k+' = '+v; }
+        else { v = a ^ k; say = nm(d.rt)+' = '+a+' XOR '+k+' = '+v; }
+        setR(d.rt, v); break; }
+      case 'LUI': { const v = (d.imm<<16)|0; say = nm(d.rt)+' = '+d.imm+' nos 16 bits de cima = '+hex8(v); setR(d.rt, v); break; }
       case 'M': {
-        const addr = (r[d.base] + d.off)|0;
-        const at = 'Memória['+nm(d.base)+' + '+d.off+'] = Mem['+hex(addr)+']';
-        if(op==='lw'||op==='sw'){ if(addr & 3) return fail('Endereço '+hex(addr)+' não é múltiplo de 4 (restrição de alinhamento). Lembre: A[i] fica em base + 4×i.'); }
-        if(op==='lw'){ const v = memRead(addr); say = nm(d.rt)+' = '+at+' = '+v; set(d.rt, v); }
-        else if(op==='sw'){ memWrite(addr, r[d.rt]); S.memChanged = addr; say = at+' = '+nm(d.rt)+' = '+r[d.rt]; }
-        else if(op==='lb'){ const w = memRead(addr), sh = (addr&3)*8; let v = (w>>>sh)&255; if(v&128) v -= 256; say = nm(d.rt)+' = byte de '+hex(addr)+' = '+v; set(d.rt, v); }
-        else { const w = memRead(addr), sh = (addr&3)*8; const nw = (w & ~(255<<sh)) | ((r[d.rt]&255)<<sh); memWrite(addr, nw); S.memChanged = addr; say = 'byte em '+hex(addr)+' = '+(r[d.rt]&255); }
+        const baseV = d.base>=0 ? r[d.base] : 0, addr = (baseV + d.off)|0;
+        const how = d.base>=0 ? nm(d.base)+' + '+d.off+' = '+(d.base===29||Math.abs(baseV)>=65536 ? hex8(baseV) : baseV)+' + '+d.off+' = '+hex8(addr) : hex8(addr);
+        if((op==='lw'||op==='sw') && (addr & 3)) return fail('Endereço '+hex8(addr)+' não é múltiplo de 4 (linha '+(ins.line+1)+'). Palavras precisam estar alinhadas: o deslocamento tem que ser i × 4.');
+        if(op==='lw'){ const v = rdW(addr); say = 'endereço = '+how+' → '+nm(d.rt)+' = Mem['+hex8(addr)+'] = '+v; setR(d.rt, v); }
+        else if(op==='sw'){ wrW(addr, r[d.rt], {line:ins.line, reg:d.rt, op}); say = 'endereço = '+how+' → Mem['+hex8(addr)+'] = '+nm(d.rt)+' = '+r[d.rt]; }
+        else if(op==='lb'||op==='lbu'){ const sh = (addr&3)*8; let v = (rdW(addr)>>>sh)&255; if(op==='lb' && (v&128)) v -= 256; say = 'endereço = '+how+' → '+nm(d.rt)+' = byte '+v+(v>31&&v<127?" ('"+String.fromCharCode(v)+"')":''); setR(d.rt, v); }
+        else { const sh = (addr&3)*8, w = rdW(addr), b = r[d.rt]&255; wrW(addr, (w & ~(255<<sh)) | (b<<sh), {line:ins.line, reg:d.rt, op}); say = 'endereço = '+how+' → byte em '+hex8(addr)+' = '+b+(b>31&&b<127?" ('"+String.fromCharCode(b)+"')":''); }
         break; }
       case 'B': {
-        const a = r[d.rs], b = r[d.rt], eq = a===b, take = op==='beq' ? eq : !eq, sym = op==='beq' ? '==' : '!=';
-        say = nm(d.rs)+' '+sym+' '+nm(d.rt)+'? → '+a+' '+sym+' '+b+'? '+(take ? 'sim → pula para '+labelAt(d.target) : 'não → segue para a linha de baixo');
+        const a = r[d.rs], b = d.rt!==undefined ? r[d.rt] : d.imm, bn = d.rt!==undefined ? nm(d.rt) : String(d.imm);
+        const eq = a===b, take = d.bop==='beq' ? eq : !eq, sym = d.bop==='beq' ? '==' : '!=';
+        say = nm(d.rs)+' '+sym+' '+bn+'? → '+a+' '+sym+' '+b+'? '+(take ? 'sim → pula para '+lblAt(d.target) : 'não → segue para a linha de baixo');
+        if(take) next = d.target; break; }
+      case 'BC': {
+        const a = r[d.rs], b = d.rt!==undefined ? r[d.rt] : d.imm;
+        const SY = {blt:'<',bgt:'>',ble:'<=',bge:'>='}, take = d.bop==='blt' ? a<b : d.bop==='bgt' ? a>b : d.bop==='ble' ? a<=b : a>=b;
+        say = a+' '+SY[d.bop]+' '+b+'? '+(take ? 'sim → pula para '+lblAt(d.target) : 'não → segue');
         if(take) next = d.target; break; }
       case 'J': {
-        if(op==='jal'){ const ret = BASE + 4*(S.pc+1); set(31, ret); say = '$ra = '+hex(ret)+' (endereço de volta) e pula para '+labelAt(d.target); }
-        else say = 'pula para '+labelAt(d.target);
+        if(d.jop==='jal'){ const ret = TEXT_BASE + 4*(M.pc+1); setR(31, ret); say = '$ra = '+hex8(ret)+' (endereço de volta) e pula para '+lblAt(d.target); }
+        else say = 'pula para '+lblAt(d.target);
         next = d.target; break; }
-      case 'JR': {
+      case 'JR': case 'JALR': {
         const t = r[d.rs];
-        if(t===0 && d.rs===31){ S.steps++; S.last = {line:ins.line}; S.log.push({t:'L'+(ins.line+1)+': '+ins.src.trim()+'  →  $ra = 0: voltou para o sistema'}); finish('jr $ra com $ra = 0: o procedimento voltou para o sistema. Fim do programa.'); return; }
-        const idx = (t - BASE)/4;
-        if(!Number.isInteger(idx) || idx<0 || idx>S.P.prog.length) return fail('jr para '+hex(t)+', que não é o endereço de nenhuma instrução.');
-        say = 'volta para '+hex(t)+' ('+labelAt(idx)+')'; next = idx; break; }
-      case 'MOVE': { const v = r[d.rs]; say = nm(d.rd)+' = '+nm(d.rs)+' = '+v; set(d.rd, v); break; }
-      case 'LI': { say = nm(d.rd)+' = '+d.imm; set(d.rd, d.imm); break; }
+        if(d.k==='JR' && t===0 && d.rs===31){ M.steps++; M.log.push('L'+(ins.line+1)+': '+splitComment(ins.src)[0].trim().replace(/\s+/g,' ')+'  →  $ra = 0: voltou para o sistema'); M.done = true; M.endMsg = 'jr $ra com $ra = 0: o código voltou para o sistema. Fim.'; M.changed = []; M.hist.push(rec); return false; }
+        const ix = ((t>>>0) - TEXT_BASE)/4;
+        if(!Number.isInteger(ix) || ix<0 || ix>prog.text.length) return fail('jr para '+hex8(t)+', que não é o endereço de nenhuma instrução (linha '+(ins.line+1)+').');
+        if(d.k==='JALR'){ const ret = TEXT_BASE + 4*(M.pc+1); setR(31, ret); }
+        say = 'volta para '+hex8(t)+' ('+lblAt(ix)+')'; next = ix; break; }
+      case 'MD': {
+        const a = r[d.rs], b = r[d.rt];
+        rec.hi = M.hi; rec.lo = M.lo;
+        if(d.mop==='mult'||d.mop==='multu'){ const p = BigInt.asIntN(64, BigInt(d.mop==='mult'?a:(a>>>0)) * BigInt(d.mop==='mult'?b:(b>>>0))); M.lo = Number(BigInt.asIntN(32, p)); M.hi = Number(BigInt.asIntN(32, p>>32n)); say = 'HI:LO = '+a+' × '+b+' → LO = '+M.lo; }
+        else { if(b===0) return fail('Divisão por zero na linha '+(ins.line+1)+'.'); M.lo = (a/b)|0; M.hi = a%b; say = 'LO = '+a+' ÷ '+b+' = '+M.lo+', HI (resto) = '+M.hi; }
+        break; }
+      case 'DIV3': { const a = r[d.rs], b = r[d.rt]; if(b===0) return fail('Divisão por zero na linha '+(ins.line+1)+'.'); const v = (a/b)|0; say = nm(d.rd)+' = '+a+' ÷ '+b+' = '+v; setR(d.rd, v); break; }
+      case 'MF': { const v = d.mop==='mfhi' ? M.hi : M.lo; say = nm(d.rd)+' = '+(d.mop==='mfhi'?'HI':'LO')+' = '+v; setR(d.rd, v); break; }
+      case 'MOVE': { const v = r[d.rs]; say = nm(d.rd)+' = '+nm(d.rs)+' = '+v; setR(d.rd, v); break; }
+      case 'LI': { say = d.la ? nm(d.rd)+' = endereço de '+d.la+' = '+hex8(d.imm) : nm(d.rd)+' = '+d.imm; setR(d.rd, d.imm); break; }
       case 'NOP': say = 'nop: não faz nada'; break;
-      case 'END': S.steps++; finish('syscall: fim do programa.'); return;
+      case 'SYS': {
+        const code = r[2];
+        if(code===1){ M.out += String(r[4]); say = 'syscall 1: imprime o inteiro $a0 = '+r[4]; }
+        else if(code===4){ let a = r[4]>>>0, s = '', n = 0; while(n<10000){ const b = (rdW(a)>>>((a&3)*8))&255; if(!b) break; s += String.fromCharCode(b); a = (a+1)>>>0; n++; } M.out += s; say = 'syscall 4: imprime o texto em '+hex8(r[4])+': "'+s+'"'; }
+        else if(code===11){ M.out += String.fromCharCode(r[4]&255); say = 'syscall 11: imprime o caractere '+(r[4]&255); }
+        else if(code===5){ if(M.kbdPos >= M.kbd.length) return fail('syscall 5 quer ler um número, mas o campo "Teclado" acabou. Escreva os números lá (ex.: 2 10) e clique em Montar.'); const v = M.kbd[M.kbdPos++]; rec.kbd = true; say = 'syscall 5: lê '+v+' do teclado → $v0'; setR(2, v); }
+        else if(code===10||code===17){ M.steps++; M.log.push('L'+(ins.line+1)+': syscall  →  fim do programa'); M.done = true; M.endMsg = 'syscall 10: fim do programa.'; M.changed = []; M.hist.push(rec); return false; }
+        else return fail('syscall com $v0 = '+code+' não é suportada aqui (use 1, 4, 5, 10 ou 11).');
+        break; }
     }
-    S.steps++; S.pc = next; S.changed = changed; S.last = {line:ins.line};
-    S.log.push({t:'L'+(ins.line+1)+': '+ins.src.trim().replace(/\s+/g,' ')+'  →  '+say});
-    if(S.log.length > 300) S.log.splice(0, S.log.length-300);
-    if(S.steps >= 200000) fail('Passou de 200.000 instruções: deve ser um laço infinito. Confira se o contador está sendo incrementado e se o teste de saída está certo.');
+    if(d.warn && d.warn.length && !M.warned.has(ins.line)){ M.warned.add(ins.line); say += '  ⚠ '+d.warn.join('; '); }
+    M.steps++; M.pc = next; M.changed = changed;
+    M.log.push('L'+(ins.line+1)+': '+splitComment(ins.src)[0].trim().replace(/\s+/g,' ')+'  →  '+say);
+    M.hist.push(rec);
+    if(M.hist.length > 60000) M.hist.splice(0, 10000);
+    return true;
+  }
+  function mkRec(){ return {pc:M.pc, steps:M.steps, regs:[], mem:[], outLen:M.out.length, logLen:M.log.length, kbdPos:M.kbdPos, hi:M.hi, lo:M.lo, done:M.done, err:M.err, endMsg:M.endMsg}; }
+  function undo(){
+    if(!M || !M.hist.length) return false;
+    const rec = M.hist.pop();
+    for(let k=rec.regs.length-1;k>=0;k--){ const [i,v] = rec.regs[k]; M.regs[i] = v; }
+    for(let k=rec.mem.length-1;k>=0;k--){ const [a,v,mt] = rec.mem[k]; if(v===undefined) M.mem.delete(a); else M.mem.set(a,v); if(mt===undefined) M.meta.delete(a); else M.meta.set(a,mt); }
+    M.pc = rec.pc; M.steps = rec.steps; M.out = M.out.slice(0, rec.outLen); M.log.length = rec.logLen; M.kbdPos = rec.kbdPos; M.hi = rec.hi; M.lo = rec.lo;
+    M.done = rec.done; M.err = rec.err; M.endMsg = rec.endMsg; M.changed = rec.regs.map(x => x[0]); M.memChanged = rec.mem.length ? rec.mem[0][0] : null;
+    return true;
+  }
+
+  /* ---------- painéis ---------- */
+  const fv = v => fmt==='h' ? hex8(v) : (Math.abs(v)>=1e6 ? hex8(v) : String(v));
+  function charsOf(w){ let s = ''; for(let b=0;b<4;b++){ const c = (w>>>(8*b))&255; s += c>31&&c<127 ? String.fromCharCode(c) : (c===0?'∅':'·'); } return s; }
+  function status(){
+    let h = '';
+    if(dirty) h = '<span class="pill-warn">código alterado: será montado de novo no próximo Passo</span>';
+    else if(prog && M){
+      const nIns = prog.text.length, nData = prog.dataEnd - DATA_BASE;
+      h = '<span>Montado: <b>'+nIns+'</b> instruções'+(nData?', <b>'+nData+'</b> bytes de dados':'')+'</span><span>Executadas: <b>'+M.steps+'</b></span><span>PC = <b>'+hex8(TEXT_BASE+4*M.pc)+'</b>'+(curLine()>=0?' (linha '+(curLine()+1)+')':'')+'</span>';
+    }
+    $('#lab-status').innerHTML = h;
   }
   function render(){
-    $$('.ln', view).forEach(el => el.classList.remove('cur','err'));
-    let curLine = -1;
-    if(!S.done && S.pc < S.P.prog.length) curLine = S.P.prog[S.pc].line;
-    if(curLine>=0){ const el = view.querySelector('[data-l="'+curLine+'"]'); if(el){ el.classList.add('cur'); const top = el.offsetTop - view.clientHeight/2; view.scrollTop = Math.max(0, top); } }
-    if(S.errLine!==undefined){ const el = view.querySelector('[data-l="'+S.errLine+'"]'); if(el) el.classList.add('err'); }
-    $('#sim-regs').innerHTML = REGN.map((n,i) => {
-      const v = S.regs[i];
-      const cls = 'sr '+famOf(i)+(S.used.has(i)||v!==0 && i!==28 && i!==29 ? '' : ' dim')+(S.changed.includes(i)?' chg':'');
-      return '<div class="'+cls+'" title="$'+n+' = '+v+' ('+hex(v)+')"><span class="k">$'+n+'</span><span class="val">'+fmtv(v)+'</span></div>';
+    status(); markLines();
+    if(!M) return;
+    const msg = $('#lab-msg');
+    if(M.err) msg.innerHTML = '<div class="msg err">'+M.err+'</div>';
+    else if(M.done) msg.innerHTML = '<div class="msg ok">'+esc(M.endMsg||'Fim.')+'</div>';
+    else if(M.steps===0) msg.innerHTML = '<div class="msg" style="background:var(--surface-2)">Pronto. A próxima linha a executar está destacada. Clique em <b>Passo</b>.</div>';
+    else msg.innerHTML = '';
+    const used = new Set([0]);
+    prog.text.forEach(ins => ins.args.forEach(a => (a.match(/\$\w+/g)||[]).forEach(t => { const r = regIndex(t); if(r>=0) used.add(r); })));
+    $('#lab-regs').innerHTML = REGN.map((n,i) => {
+      const v = M.regs[i];
+      const cls = 'sr '+famOf(i)+(used.has(i) || (v!==0 && i!==28 && i!==29) ? '' : ' dim')+(M.changed.includes(i)?' chg':'');
+      return '<div class="'+cls+'" title="$'+n+' (registrador '+i+') = '+v+' = '+hex8(v)+'"><span class="k">$'+n+'</span><span class="val">'+fv(v)+'</span></div>';
     }).join('');
-    const pcAddr = BASE + 4*S.pc;
-    let st = '<span>Executadas: <b>'+S.steps+'</b> instruções</span><span>PC = <b>'+hex(pcAddr)+'</b></span>';
-    if(S.memChanged!==null && S.memChanged!==undefined) st += '<span>Última escrita na memória: <b>'+hex(S.memChanged)+'</b> = '+memRead(S.memChanged)+'</span>';
-    $('#sim-status').innerHTML = st;
-    const res = watch.map(w => { const i = REGN.indexOf(w); return '<span class="rg '+famOf(i)+'">$'+w+'</span> = <b>'+fmtv(S.regs[i])+'</b>'; }).join(' · ');
-    if(S.err) $('#sim-msg').innerHTML = '<div class="msg err">'+S.err+'</div>';
-    else if(S.done) $('#sim-msg').innerHTML = '<div class="msg ok">'+esc(S.endMsg||'Fim.')+' Resultado: '+res+'</div>';
-    else $('#sim-msg').innerHTML = '<div class="msg" style="background:var(--surface-2)">Acompanhando: '+res+'</div>';
-    const lg = $('#sim-log');
-    lg.innerHTML = S.log.length ? S.log.slice(-80).map((x,k,arr) => '<div'+(k===arr.length-1?' class="last"':'')+'>'+esc(x.t)+'</div>').join('') : '<div class="muted">O que cada instrução fez vai aparecer aqui, em português.</div>';
+    $('#lab-pc').innerHTML = '<span>PC = <b>'+hex8(TEXT_BASE+4*M.pc)+'</b></span><span>HI = <b>'+fv(M.hi)+'</b></span><span>LO = <b>'+fv(M.lo)+'</b></span>';
+    renderStack(); renderData(); renderMC();
+    const lg = $('#lab-log');
+    lg.innerHTML = M.log.length ? M.log.slice(-150).map((x,k,arr) => '<div'+(k===arr.length-1?' class="last"':'')+'>'+esc(x)+'</div>').join('') : '<div class="muted">O que cada instrução fez vai aparecer aqui, em português.</div>';
     lg.scrollTop = lg.scrollHeight;
-    $('#sim-step').disabled = S.done; $('#sim-run').disabled = S.done; $('#sim-play').disabled = S.done && !playing;
+    const out = $('#lab-out'); out.textContent = M.out || ''; if(!M.out) out.innerHTML = '<span style="color:var(--code-cm)">(nada impresso ainda)</span>'; out.scrollTop = out.scrollHeight;
+    $('#lab-step').disabled = M.done && !dirty; $('#lab-run').disabled = M.done && !dirty; $('#lab-back').disabled = !M.hist.length;
+    $('#lab-play').textContent = playing ? '⏸ Pausar' : '▶ Animar';
   }
-  function stop(){ if(playing){ clearInterval(playing); playing = null; } $('#sim-play').textContent = 'Animar ▶'; }
-  function editing(){ return !ta.hidden; }
-  function leaveEdit(){ if(editing()){ ta.hidden = true; view.hidden = false; $('#sim-edit').textContent = 'Editar código ✎'; } }
-  $('#sim-step').onclick = () => { leaveEditAndReset(); step(); render(); };
-  $('#sim-run').onclick = () => { leaveEditAndReset(); stop(); let k = 0; while(!S.done && k < 250000){ step(); k++; } render(); };
-  $('#sim-play').onclick = () => {
+  function renderStack(){
+    const sp = M.regs[29]>>>0, fp = M.regs[30]>>>0;
+    let hi = SP_INIT, lo = Math.min(sp, SP_INIT);
+    M.mem.forEach((v,a) => { if(a>=STACK_LOW){ if(a>hi) hi = a; if(a<lo) lo = a; } });
+    lo = Math.max(STACK_LOW, lo - 8);
+    const rows = [];
+    for(let a=hi; a>=lo && rows.length<90; a-=4){
+      const v = M.mem.get(a)||0, mt = M.meta.get(a), used = a>=sp && a<SP_INIT;
+      const marks = []; if(a===sp) marks.push('← $sp'); if(a===fp && fp!==0 && fp!==sp) marks.push('← $fp'); if(a===SP_INIT) marks.push('topo inicial');
+      const note = mt ? (mt.op==='sb'?'byte de ':'')+'$'+REGN[mt.reg]+' salvo (linha '+(mt.line+1)+')' : '';
+      rows.push('<tr class="'+(used?'used':'free')+(a===sp?' sp':'')+(M.memChanged===a?' chg':'')+'"><td class="l">'+hex8(a)+'</td><td>'+(M.mem.has(a)||used ? fv(v) : '')+'</td><td class="l">'+esc(note)+'</td><td class="note">'+marks.join(' ')+'</td></tr>');
+    }
+    const n = sp<SP_INIT ? (SP_INIT-sp)/4 : 0;
+    $('#lab-spinfo').textContent = '$sp = '+hex8(sp)+' · '+n+' palavra'+(n===1?'':'s')+' em uso';
+    $('#lab-stack').innerHTML = '<table class="mtab"><thead><tr><th class="l">endereço</th><th>valor</th><th class="l">o que é</th><th></th></tr></thead><tbody>'+rows.join('')+'</tbody></table><p class="small" style="margin:.4rem 0 0">A pilha cresce para <b>baixo</b>: <code>addi $sp, $sp, -8</code> abre 2 vagas. Linhas roxas estão em uso (de <span class="rg x">$sp</span> para cima).</p>';
+    hlInline($('#lab-stack'));
+  }
+  function renderData(){
+    const addrs = new Set();
+    for(let a=DATA_BASE; a<prog.dataEnd; a+=4) addrs.add(a);
+    M.mem.forEach((v,a) => { if(a<STACK_LOW) addrs.add(a); });
+    const list = Array.from(addrs).sort((x,y) => x-y).slice(0, 300);
+    if(!list.length){ $('#lab-data').innerHTML = '<p class="small" style="margin:0">Nenhum dado na memória ainda. Use <code>.data</code> no seu código (ex.: <code>A: .word 5, 8, 2</code>) ou um <code>sw</code>.</p>'; hlInline($('#lab-data')); return; }
+    const rows = list.map(a => {
+      const v = M.mem.get(a)||0, mt = M.meta.get(a);
+      const labs = []; for(let b=0;b<4;b++){ if(prog.labelAt[a+b]) labs.push(...prog.labelAt[a+b].map(n => b?n+' (+'+b+')':n)); }
+      return '<tr class="'+(M.memChanged===a?'chg':'')+'"><td class="l">'+hex8(a)+'</td><td class="lbl">'+esc(labs.join(', '))+'</td><td>'+fv(v)+'</td><td class="l">'+esc(charsOf(v))+'</td><td class="l">'+(mt?esc(mt.op+' $'+REGN[mt.reg]+' (linha '+(mt.line+1)+')'):'')+'</td></tr>';
+    });
+    $('#lab-data').innerHTML = '<table class="mtab"><thead><tr><th class="l">endereço</th><th class="l">label</th><th>valor</th><th class="l">bytes</th><th class="l">escrito por</th></tr></thead><tbody>'+rows.join('')+'</tbody></table><p class="small" style="margin:.4rem 0 0">Cada linha é uma palavra (4 bytes): os endereços pulam de 4 em 4. "bytes" mostra os 4 bytes como letras (∅ = 0), na ordem little endian.</p>';
+  }
+  function renderMC(){
+    const cur = M.done ? -1 : M.pc;
+    $('#lab-mc').innerHTML = '<table class="mtab"><thead><tr><th class="l">endereço</th><th class="l">código</th><th class="l">instrução</th></tr></thead><tbody>'+prog.text.map((ins,i) => {
+      const w = ins.d ? encodeIns(ins, i) : null;
+      const lab = prog.textLabelAt[i] ? prog.textLabelAt[i].join(', ')+': ' : '';
+      return '<tr class="'+(i===cur?'cur':'')+'"><td class="l">'+hex8(TEXT_BASE+4*i)+'</td><td class="l">'+(w===null ? '<span class="small">pseudo</span>' : hex8(w))+'</td><td class="l"><code>'+hlLine(lab+splitComment(ins.src)[0].trim().replace(/^[A-Za-z_][\w.\-]*\s*:\s*/,''))+'</code></td></tr>';
+    }).join('')+'</tbody></table>';
+  }
+
+  /* ---------- controles ---------- */
+  function stop(){ if(playing){ clearInterval(playing); playing = null; } const b = $('#lab-play'); if(b) b.textContent = '▶ Animar'; }
+  function doStep(){ ensure(); if(M.done) { render(); return; } stepOnce(); render(); }
+  $('#lab-asm').onclick = () => assembleAndReset();
+  $('#lab-step').onclick = () => { stop(); doStep(); };
+  $('#lab-back').onclick = () => { stop(); if(dirty) return; if(undo()) render(); };
+  $('#lab-run').onclick = () => {
+    stop(); ensure();
+    let k = 0;
+    while(!M.done && k < 500000){ if(k>0 && bps.has(curLine())) break; stepOnce(); k++; }
+    if(!M.done && k>=500000){ M.log.push('… parado depois de 500.000 instruções'); $('#lab-msg').innerHTML = ''; render(); $('#lab-msg').innerHTML = '<div class="msg err">Parei depois de 500.000 instruções: parece um laço infinito. Confira se o contador muda e se o teste de saída está certo. Clique em Executar de novo para continuar.</div>'; return; }
+    render();
+    if(!M.done && bps.has(curLine())) $('#lab-msg').innerHTML = '<div class="msg" style="background:var(--surface-2)">Parado no breakpoint da linha '+(curLine()+1)+'.</div>';
+  };
+  $('#lab-play').onclick = () => {
     if(playing){ stop(); render(); return; }
-    leaveEditAndReset();
-    if(S.done) return;
-    $('#sim-play').textContent = 'Pausar ⏸';
-    playing = setInterval(() => { step(); render(); if(S.done){ stop(); render(); } }, 380);
+    ensure(); if(M.done) return;
+    const tick = () => { if(M.done){ stop(); render(); return; } stepOnce(); render(); if(!M.done && bps.has(curLine())){ stop(); render(); } };
+    const speed = () => Math.round(1400 / (+$('#lab-speed').value));
+    playing = setInterval(tick, speed());
+    $('#lab-speed').oninput = () => { if(playing){ clearInterval(playing); playing = setInterval(tick, speed()); } };
+    render();
   };
-  $('#sim-reset').onclick = () => { leaveEdit(); reset(); };
-  $('#sim-edit').onclick = () => {
-    if(editing()){ leaveEdit(); reset(); }
-    else { stop(); ta.hidden = false; view.hidden = true; $('#sim-edit').textContent = 'Pronto ✓'; ta.focus(); }
-  };
-  function leaveEditAndReset(){ if(editing()){ leaveEdit(); reset(); } }
-  function load(i){
-    const p = PRESETS[i]; ta.value = p.code(); inEl.value = p.inp || ''; memEl.value = p.mem || ''; watch = p.watch || ['v0'];
-    leaveEdit(); reset();
+  $('#lab-fmt').addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; fmt = b.dataset.i; $$('#lab-fmt button').forEach(x => x.classList.toggle('on', x===b)); if(M) render(); });
+  $('#lab-init').addEventListener('change', () => { dirty = true; status(); });
+  $('#lab-kbd').addEventListener('change', () => { dirty = true; status(); });
+  function load(code, init, kbd){
+    stop(); ta.value = code; $('#lab-init').value = init||''; $('#lab-kbd').value = kbd||''; bps.clear(); ta.scrollTop = 0;
+    renderEditor(); assembleAndReset();
   }
-  sel.onchange = () => load(+sel.value);
-  inEl.addEventListener('change', () => reset());
-  memEl.addEventListener('change', () => reset());
-  load(1);
+  sel.onchange = () => { const p = PRESETS[+sel.value]; load(p.code(), p.init, p.kbd); };
+  function openInLab(code, init, kbd, title){
+    load(code, init, kbd);
+    sel.value = '';
+    document.getElementById('lab').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth'});
+  }
+  /* atalhos da seção 3.5 */
+  const sc = $('#lab-shortcuts');
+  if(sc) PRESETS.slice(1, -1).forEach((p,k) => {
+    const b = document.createElement('button'); b.className = 'btn'; b.type = 'button'; b.textContent = p.n;
+    b.onclick = () => { sel.value = String(k+1); openInLab(p.code(), p.init, p.kbd); sel.value = String(k+1); };
+    sc.appendChild(b);
+  });
+  /* botões debaixo dos códigos */
+  $$('pre.asm[data-lab]').forEach(pre => {
+    const b = document.createElement('button'); b.className = 'btn labbtn'; b.type = 'button'; b.textContent = '▶ Rodar no laboratório';
+    b.onclick = () => openInLab(pre.textContent, pre.dataset.lab, '');
+    pre.insertAdjacentElement('afterend', b);
+  });
+  load(PRESETS[0].code(), PRESETS[0].init, PRESETS[0].kbd);
 })();
 
 /* ---------- Navegação: marca a parte atual ---------- */
